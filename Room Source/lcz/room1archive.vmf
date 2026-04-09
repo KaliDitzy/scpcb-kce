@@ -24309,59 +24309,21 @@ entity
 }
 entity
 {
-    "id" "287"
+    "id" "292"
     "classname" "door"
-    "angle" "0"
     "type" "0"
-    "open" "0"
-    "locked" "0"
-    "code" ""
-    "position" "0 0 -480"
-    "keycard" "3"
-    "allowremotecontrol" "No"
-    "spawnflags" "0"
-    "origin" "0.00000000 -480.00000000 0.00000000"
-    editor
-    {
-        "color" "255 0 255"
-        "visgroupshown" "1"
-        "visgroupautoshown" "1"
-        "parentid" "2"
-    }
-}
-entity
-{
-    "id" "289"
-    "classname" "door"
-    "angle" "0"
-    "type" "0"
-    "open" "0"
-    "locked" "No"
-    "code" ""
-    "position" "512 0 -480"
-    "allowremotecontrol" "No"
-    "keycard" "4"
-    "spawnflags" "0"
-    "origin" "512.00000000 -480.00000000 0.00000000"
-    editor
-    {
-        "color" "255 0 255"
-        "visgroupshown" "1"
-        "visgroupautoshown" "1"
-        "parentid" "2"
-    }
-}
-entity
-{
-    "id" "290"
-    "classname" "door"
-    "angle" "90"
-    "type" "0"
-    "open" "0"
-    "locked" "0"
+    "keycard" "0"
     "code" "ABCD"
+    "angle" "90"
+    "open" "No"
+    "locked" "No"
+    "half" "No"
+    "allowremotecontrol" "Yes"
+    "button1pos" "0 0 0"
+    "button1angle" "0 0 0"
+    "button2pos" "0 0 0"
+    "button2angle" "0 0 0"
     "position" "-992 0 -704"
-    "allowremotecontrol" "No"
     "spawnflags" "0"
     "origin" "-992.00000000 -704.00000000 0.00000000"
     editor
@@ -24374,18 +24336,77 @@ entity
 }
 entity
 {
-    "id" "291"
+    "id" "293"
     "classname" "door"
-    "angle" "0"
     "type" "0"
-    "open" "0"
-    "locked" "0"
-    "code" ""
-    "position" "-512 0 -480"
     "keycard" "2"
+    "code" ""
+    "angle" "0.0"
+    "open" "No"
+    "locked" "No"
+    "half" "No"
     "allowremotecontrol" "No"
+    "button1pos" "0 0 0"
+    "button1angle" "0 0 0"
+    "button2pos" "0 0 0"
+    "button2angle" "0 0 0"
+    "position" "-512 0 -480"
     "spawnflags" "0"
     "origin" "-512.00000000 -480.00000000 0.00000000"
+    editor
+    {
+        "color" "255 0 255"
+        "visgroupshown" "1"
+        "visgroupautoshown" "1"
+        "parentid" "2"
+    }
+}
+entity
+{
+    "id" "294"
+    "classname" "door"
+    "type" "0"
+    "keycard" "3"
+    "code" ""
+    "angle" "0.0"
+    "open" "No"
+    "locked" "No"
+    "half" "No"
+    "allowremotecontrol" "No"
+    "button1pos" "0 0 0"
+    "button1angle" "0 0 0"
+    "button2pos" "0 0 0"
+    "button2angle" "0 0 0"
+    "position" "0 0 -480"
+    "spawnflags" "0"
+    "origin" "0.00000000 -480.00000000 0.00000000"
+    editor
+    {
+        "color" "255 0 255"
+        "visgroupshown" "1"
+        "visgroupautoshown" "1"
+        "parentid" "2"
+    }
+}
+entity
+{
+    "id" "295"
+    "classname" "door"
+    "type" "0"
+    "keycard" "4"
+    "code" ""
+    "angle" "0.0"
+    "open" "No"
+    "locked" "No"
+    "half" "No"
+    "allowremotecontrol" "No"
+    "button1pos" "0 0 0"
+    "button1angle" "0 0 0"
+    "button2pos" "0 0 0"
+    "button2angle" "0 0 0"
+    "position" "512 0 -480"
+    "spawnflags" "0"
+    "origin" "512.00000000 -480.00000000 0.00000000"
     editor
     {
         "color" "255 0 255"
@@ -24399,8 +24420,8 @@ cameras
     "activecamera" "0"
     camera
     {
-        "position" "[480.60250000 -825.07420000 243.56180000]"
-        "look" "[522.32820000 -739.75960000 229.54440000]"
+        "position" "[-123.60920000 -804.65410000 241.71670000]"
+        "look" "[-186.78380000 -735.70060000 220.02660000]"
     }
 }
 cordon
