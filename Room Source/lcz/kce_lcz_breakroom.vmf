@@ -27,7 +27,7 @@ viewsettings
     "bSnapToGrid" "1"
     "bShowGrid" "1"
     "bShow3DGrid" "0"
-    "nGridSpacing" "4"
+    "nGridSpacing" "32"
     "bIgnoreGrouping" "0"
     "bHideFaceMask" "0"
     "bHideToolTextures" "0"
@@ -20302,13 +20302,58 @@ entity
         "parentid" "1"
     }
 }
+entity
+{
+    "id" "611"
+    "classname" "waypoint"
+    "position" "0 32 0"
+    "spawnflags" "0"
+    "origin" "0.00000000 0.00000000 32.00000000"
+    editor
+    {
+        "color" "255 0 255"
+        "visgroupshown" "1"
+        "visgroupautoshown" "1"
+        "parentid" "1"
+    }
+}
+entity
+{
+    "id" "612"
+    "classname" "waypoint"
+    "position" "768 32 0"
+    "spawnflags" "0"
+    "origin" "768.00000000 0.00000000 32.00000000"
+    editor
+    {
+        "color" "255 0 255"
+        "visgroupshown" "1"
+        "visgroupautoshown" "1"
+        "parentid" "1"
+    }
+}
+entity
+{
+    "id" "613"
+    "classname" "waypoint"
+    "position" "768 32 -768"
+    "spawnflags" "0"
+    "origin" "768.00000000 -768.00000000 32.00000000"
+    editor
+    {
+        "color" "255 0 255"
+        "visgroupshown" "1"
+        "visgroupautoshown" "1"
+        "parentid" "1"
+    }
+}
 cameras
 {
     "activecamera" "0"
     camera
     {
-        "position" "[428.61950000 -53.44263000 321.09610000]"
-        "look" "[470.08800000 -29.27311000 321.55900000]"
+        "position" "[829.90780000 -737.73580000 121.65150000]"
+        "look" "[786.77670000 -716.74160000 119.92740000]"
     }
 }
 cordon
