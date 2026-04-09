@@ -34,7 +34,7 @@ viewsettings
     "bShowGrid" "1"
     "bShow3DGrid" "0"
     "nGridSpacing" "16"
-    "bIgnoreGrouping" "0"
+    "bIgnoreGrouping" "1"
     "bHideFaceMask" "0"
     "bHideToolTextures" "1"
     "bHideEntitySprites" "0"
@@ -61916,13 +61916,40 @@ entity
         "parentid" "735"
     }
 }
+entity
+{
+    "id" "829"
+    "classname" "door"
+    "type" "0"
+    "keycard" "0"
+    "code" ""
+    "angle" "0.0"
+    "open" "No"
+    "locked" "No"
+    "half" "No"
+    "allowremotecontrol" "Yes"
+    "button1pos" "0 0 0"
+    "button1angle" "0 0 0"
+    "button2pos" "0 0 0"
+    "button2angle" "0 0 0"
+    "position" "-416 -4224 0"
+    "spawnflags" "0"
+    "origin" "-416.00000000 0.00000000 -4224.00000000"
+    editor
+    {
+        "color" "255 0 255"
+        "visgroupshown" "1"
+        "visgroupautoshown" "1"
+        "parentid" "2"
+    }
+}
 cameras
 {
     "activecamera" "0"
     camera
     {
-        "position" "[624.27980000 197.94280000 -3546.84400000]"
-        "look" "[531.35670000 174.30630000 -3551.62500000]"
+        "position" "[-755.46310000 -11.40937000 -3933.75000000]"
+        "look" "[-679.18930000 22.24349000 -3981.35300000]"
     }
 }
 cordon
