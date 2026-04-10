@@ -3,7 +3,7 @@
 using namespace B3D;
 using namespace CB;
 
-void Hook_Initialize() {
+void Hook_InitializeEvents() {
     CreateEvent("kce_018cc", "kce_018cc", 0, 1);
 }
 
