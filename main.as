@@ -4,7 +4,7 @@ using namespace B3D;
 using namespace CB;
 
 void Hook_Initialize() {
-    CreateEvent("kce_018cc", "kce_018cc", 0);
+    CreateEvent("kce_018cc", "kce_018cc", 0, 1);
 }
 
 void Hook_FillRoom(Room@ r) {
