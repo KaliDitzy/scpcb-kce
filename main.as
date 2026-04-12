@@ -2,13 +2,14 @@ using namespace B3D;
 using namespace CB;
 
 #include "randomitems.as"
+#include "015.as"
 
 void Hook_InitializeEvents() {
     CreateEvent("kce_018cc", "kce_018cc", 0, 1);
 }
 
 void Hook_FillRoom(Room@ r) {
-    if (r.Template.Name == "kce_018cc") {
+    if(r.Template.Name == "kce_018cc") {
         // == Elevator Doors ==
         // Enter
         @r.Doors[0] = Door(r.Zone, r.X - 416 / 256.f, r.Y, r.Z, 270, r, true, 3); r.Doors[0].AutoClose = false; r.Doors[0].Open = true;
@@ -20,6 +21,9 @@ void Hook_FillRoom(Room@ r) {
         @r.Objects[1] = Pivot::Create();
         r.Objects[1].Position(r.X - 720 / 256.f, r.Y - 4224 / 256.f, r.Z, true);
         r.Objects[1].SetParent(r.Object);
+    }
+    else if(r.Template.Name == "room079") {
+        Generate015Nightmare(r);
     }
 }
 void Hook_PostFillRoom(Room@ r) {
