@@ -21,6 +21,8 @@ void Hook_FillRoom(Room@ r) {
         r.Objects[1].Position(r.X - 720 / 256.f, r.Y - 4224 / 256.f, r.Z, true);
         r.Objects[1].SetParent(r.Object);
     }
+}
+void Hook_PostFillRoom(Room@ r) {
     FillRoom_RandomItems(r);
 }
 
