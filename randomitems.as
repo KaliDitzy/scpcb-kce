@@ -8,12 +8,16 @@ using namespace CB;
  * @param weights The array of weights, as integers.
  * @return Selected item
  */
-string RandomPickWeighted(const array<string>@ items, const array<int>@ weights) {
+string RandomPickWeighted(const array<string>& items, const array<int>& weights) {
     int totalWeight = 0;
     foreach(int v : weights) { totalWeight += v; }
 
     int picker = Rnd(totalWeight); int ticker = 0; int i = 0;
-    foreach(int v : weights) { ticker += v; if (ticker > picker) { return items[i]; } i++; }
+    foreach(int v : weights) {
+        ticker += v;
+        if (ticker > picker && i < weights.Length) { return items[i]; }
+        i++;
+    }
 
     return "origami";
 }
@@ -33,8 +37,10 @@ void FillRoom_RandomItems(Room@ r) {
         6,
         4,
         2,
-        5
+        10
     };
-    Item@ it = Item(RandomPickWeighted(items, weights), r.X, r.Y + 64 / 256.f, r.Z);
+    string result = RandomPickWeighted(items, weights);
+    Console::CreateMessage(result);
+    Item@ it = Item(result, r.X, r.Y + 64 / 256.f, r.Z);
     it.Collider.SetParent(r.Object);
 }
