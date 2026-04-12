@@ -9,13 +9,15 @@ using namespace CB;
  * @return Selected item
  */
 string RandomPickWeighted(const array<string>& items, const array<int>& weights) {
+    return "origami";
+    
     int totalWeight = 0;
     foreach(int v : weights) { totalWeight += v; }
 
     int picker = Rnd(totalWeight); int ticker = 0; int i = 0;
     foreach(int v : weights) {
         ticker += v;
-        if (ticker > picker && i < weights.Length) { return items[i]; }
+        if (ticker > picker) { return items[i]; }
         i++;
     }
 
@@ -23,6 +25,20 @@ string RandomPickWeighted(const array<string>& items, const array<int>& weights)
 }
 
 void FillRoom_RandomItems(Room@ r) {
+    float targetX = r.X;
+    float targetY = r.Y + 64 / 256.f;
+    float targetZ = r.Z;
+    NPC@ body = NPC(NPC::Type::ClassD, targetX, targetY, targetZ);
+    body.State = 3;
+    body.SetNPCFrame(40);
+    body.IsDead = 1;
+    body.Texture = "GFX\\npcs\\body2.jpg";
+    Texture@ tex = LoadTexture(body.Texture);
+    Mesh@ mesh = cast<Mesh@>(body.Object);
+    mesh.SetTexture(tex);
+    tex.Free();
+
+
     const array<string>@ items = {
         "key1",
         "key2",
@@ -41,6 +57,8 @@ void FillRoom_RandomItems(Room@ r) {
     };
     string result = RandomPickWeighted(items, weights);
     Console::CreateMessage(result);
-    Item@ it = Item(result, r.X, r.Y + 64 / 256.f, r.Z);
+    float x = Rnd(128, 256);
+    float z = Rnd(128, 256);
+    Item@ it = Item(result, targetX + x / 256.f, targetY, targetZ + z / 256.f);
     it.Collider.SetParent(r.Object);
 }
