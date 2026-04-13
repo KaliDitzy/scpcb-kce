@@ -20347,13 +20347,31 @@ entity
         "parentid" "1"
     }
 }
+entity
+{
+    "id" "614"
+    "classname" "model"
+    "file" "microwave"
+    "angles" "360 -139.1227 360"
+    "scale" "1 1 1"
+    "position" "362.74371 120 -623.15785"
+    "spawnflags" "0"
+    "origin" "362.74371000 -623.15785000 120.00000000"
+    editor
+    {
+        "color" "255 0 255"
+        "visgroupshown" "1"
+        "visgroupautoshown" "1"
+        "parentid" "1"
+    }
+}
 cameras
 {
     "activecamera" "0"
     camera
     {
-        "position" "[829.90780000 -737.73580000 121.65150000]"
-        "look" "[786.77670000 -716.74160000 119.92740000]"
+        "position" "[606.52670000 -719.06140000 233.09290000]"
+        "look" "[562.41640000 -706.47220000 218.95760000]"
     }
 }
 cordon
