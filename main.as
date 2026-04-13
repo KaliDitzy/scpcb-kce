@@ -36,11 +36,12 @@ void Hook_PostFillRoom(Room@ r) {
 }
 
 void Hook_UpdateEvent(Event@ e) {
-    if (e.Name == "kce_018cc" && Player::CurrentRoom == e.Room) {
+    bool playerIsInRoom = (@e.Room == @Player::CurrentRoom);
+    if (e.Name == "kce_018cc" && playerIsInRoom) {
         e.State2 = UpdateElevator(e.State2, e.Room.Doors[0], e.Room.Doors[1], e.Room.Objects[0], e.Room.Objects[1], e);
     }
     else if (e.Name == "kce_015cc") {
-        if (Player::CurrentRoom == e.Room) {
+        if (playerIsInRoom) {
             //e.State2 = UpdateElevator(e.State2, e.Room.Doors[0], e.Room.Doors[1], e.Room.Objects[0], e.Room.Objects[1], e);
             e.State += 1;
             if (e.State > 300) {
