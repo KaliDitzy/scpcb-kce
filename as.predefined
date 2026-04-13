@@ -214,8 +214,8 @@ B3D::Listener@ Create(B3D::Entity@ parent, float rolloffFactor = 1, float dopple
 
 namespace B3D {
 void CombineKeys(int flush);
-int KeyDown(int key);
-int KeyHit(int key);
+bool KeyDown(int key);
+bool KeyHit(int key);
 int GetKey();
 int WaitKey();
 string TextInput(string txt);
@@ -467,8 +467,8 @@ class array<T> {
     bool opEquals(const T[]&in) const;
     bool get_IsEmpty() const property;
     void Sort(T[]::less&in, uint startAt = 0, uint count = uint(-1));
-    uint get_length() const property;
-    void set_length(uint) property;
+    uint get_Length() const property;
+    void set_Length(uint) property;
 }
 
 class string {
@@ -485,47 +485,6 @@ class string {
     string Replace(const string&in toReplace, const string&in replaceWith) const;
     float ParseFloat() const;
     int ParseInt() const;
-}
-
-class dictionaryValue {
-    ~dictionaryValue();
-    dictionaryValue();
-    dictionaryValue& opAssign(const dictionaryValue&in);
-    dictionaryValue& opHndlAssign(const ?&in);
-    dictionaryValue& opHndlAssign(const dictionaryValue&in);
-    dictionaryValue& opAssign(const ?&in);
-    dictionaryValue& opAssign(double);
-    dictionaryValue& opAssign(int64);
-    void opCast(?&out);
-    void opConv(?&out);
-    int64 opConv();
-    double opConv();
-}
-
-class dictionary {
-    dictionary& opAssign(const dictionary&in);
-    void Set(const string&in, const ?&in);
-    bool Get(const string&in, ?&out) const;
-    void Set(const string&in, const int64&in);
-    bool Get(const string&in, int64&out) const;
-    void Set(const string&in, const double&in);
-    bool Get(const string&in, double&out) const;
-    bool Exists(const string&in) const;
-    bool get_IsEmpty() const property;
-    uint get_Size() const property;
-    bool Delete(const string&in);
-    void DeleteAll();
-    string[]@ GetKeys() const;
-    dictionaryValue& opIndex(const string&in);
-    const dictionaryValue& opIndex(const string&in) const;
-    dictionaryIter@ opForBegin() const;
-    bool opForEnd(dictionaryIter@) const;
-    dictionaryIter@ opForNext(dictionaryIter@) const;
-    const dictionaryValue& opForValue0(dictionaryIter@) const;
-    const string& opForValue1(dictionaryIter@) const;
-}
-
-class dictionaryIter {
 }
 
 class carray<T> {
@@ -728,15 +687,15 @@ class Surface {
 class Entity {
     B3D::Channel@ EmitSound(B3D::Sound@ entity);
     B3D::Entity@ Copy(B3D::Entity@ = null);
-    float GetX(int global = 0, float tween = 1);
-    float GetY(int global = 0, float tween = 1);
-    float GetZ(int global = 0, float tween = 1);
-    float GetPitch(int global = 0, float tween = 1);
-    float GetYaw(int global = 0, float tween = 1);
-    float GetRoll(int global = 0, float tween = 1);
-    float GetScaleX(int global = 0, float tween = 1);
-    float GetScaleY(int global = 0, float tween = 1);
-    float GetScaleZ(int global = 0, float tween = 1);
+    float GetX(bool global = false, float tween = 1);
+    float GetY(bool global = false, float tween = 1);
+    float GetZ(bool global = false, float tween = 1);
+    float GetPitch(bool global = false, float tween = 1);
+    float GetYaw(bool global = false, float tween = 1);
+    float GetRoll(bool global = false, float tween = 1);
+    float GetScaleX(bool global = false, float tween = 1);
+    float GetScaleY(bool global = false, float tween = 1);
+    float GetScaleZ(bool global = false, float tween = 1);
     float GetMatElement(int row, int column);
     void Reset();
     void SetType(int collisionType, int recursive = 0);
@@ -763,12 +722,12 @@ class Entity {
     B3D::Entity@ CollisionEntity(int collisionIndex);
     B3D::Surface@ CollisionSurface(int collisionIndex);
     int CollisionTriangle(int collisionIndex);
-    void Move(float x, float y, float z, int global = 0);
-    void Turn(float pitch, float yaw, float roll, int global = 0);
-    void Translate(float x, float y, float z, int global = 0);
-    void Position(float x, float y, float z, int global = 0);
-    void Scale(float xScale, float yScale, float zScale, int global = 0);
-    void Rotate(float pitch, float yaw, float roll, int global = 0);
+    void Move(float x, float y, float z, bool global = false);
+    void Turn(float pitch, float yaw, float roll, bool global = false);
+    void Translate(float x, float y, float z, bool global = false);
+    void Position(float x, float y, float z, bool global = false);
+    void Scale(float xScale, float yScale, float zScale, bool global = false);
+    void Rotate(float pitch, float yaw, float roll, bool global = false);
     void PointAt(B3D::Entity@ target, float roll = 0);
     void AlignToVector(float vectorX, float vectorY, float vectorZ, int axis, float rate = 1);
     float GetPitchTo(B3D::Entity@ destEntity);
@@ -782,7 +741,7 @@ class Entity {
     float get_AnimTime() const property;
     int get_AnimLength() const property;
     int get_Animating() const property;
-    void SetParent(B3D::Entity@ parent, int global = 1);
+    void SetParent(B3D::Entity@ parent, bool global = true);
     int CountChildren();
     B3D::Entity@ GetChild(int index);
     B3D::Entity@ FindChild(string name);
@@ -814,15 +773,15 @@ class Entity {
 class Model {
     B3D::Channel@ EmitSound(B3D::Sound@ entity);
     B3D::Model@ Copy(B3D::Entity@ = null);
-    float GetX(int global = 0, float tween = 1);
-    float GetY(int global = 0, float tween = 1);
-    float GetZ(int global = 0, float tween = 1);
-    float GetPitch(int global = 0, float tween = 1);
-    float GetYaw(int global = 0, float tween = 1);
-    float GetRoll(int global = 0, float tween = 1);
-    float GetScaleX(int global = 0, float tween = 1);
-    float GetScaleY(int global = 0, float tween = 1);
-    float GetScaleZ(int global = 0, float tween = 1);
+    float GetX(bool global = false, float tween = 1);
+    float GetY(bool global = false, float tween = 1);
+    float GetZ(bool global = false, float tween = 1);
+    float GetPitch(bool global = false, float tween = 1);
+    float GetYaw(bool global = false, float tween = 1);
+    float GetRoll(bool global = false, float tween = 1);
+    float GetScaleX(bool global = false, float tween = 1);
+    float GetScaleY(bool global = false, float tween = 1);
+    float GetScaleZ(bool global = false, float tween = 1);
     float GetMatElement(int row, int column);
     void Reset();
     void SetType(int collisionType, int recursive = 0);
@@ -849,12 +808,12 @@ class Model {
     B3D::Entity@ CollisionEntity(int collisionIndex);
     B3D::Surface@ CollisionSurface(int collisionIndex);
     int CollisionTriangle(int collisionIndex);
-    void Move(float x, float y, float z, int global = 0);
-    void Turn(float pitch, float yaw, float roll, int global = 0);
-    void Translate(float x, float y, float z, int global = 0);
-    void Position(float x, float y, float z, int global = 0);
-    void Scale(float xScale, float yScale, float zScale, int global = 0);
-    void Rotate(float pitch, float yaw, float roll, int global = 0);
+    void Move(float x, float y, float z, bool global = false);
+    void Turn(float pitch, float yaw, float roll, bool global = false);
+    void Translate(float x, float y, float z, bool global = false);
+    void Position(float x, float y, float z, bool global = false);
+    void Scale(float xScale, float yScale, float zScale, bool global = false);
+    void Rotate(float pitch, float yaw, float roll, bool global = false);
     void PointAt(B3D::Entity@ target, float roll = 0);
     void AlignToVector(float vectorX, float vectorY, float vectorZ, int axis, float rate = 1);
     float GetPitchTo(B3D::Entity@ destEntity);
@@ -868,7 +827,7 @@ class Model {
     float get_AnimTime() const property;
     int get_AnimLength() const property;
     int get_Animating() const property;
-    void SetParent(B3D::Entity@ parent, int global = 1);
+    void SetParent(B3D::Entity@ parent, bool global = true);
     int CountChildren();
     B3D::Entity@ GetChild(int index);
     B3D::Entity@ FindChild(string name);
@@ -919,15 +878,15 @@ class Model {
 class Mesh {
     B3D::Channel@ EmitSound(B3D::Sound@ entity);
     B3D::Mesh@ Copy(B3D::Entity@ = null);
-    float GetX(int global = 0, float tween = 1);
-    float GetY(int global = 0, float tween = 1);
-    float GetZ(int global = 0, float tween = 1);
-    float GetPitch(int global = 0, float tween = 1);
-    float GetYaw(int global = 0, float tween = 1);
-    float GetRoll(int global = 0, float tween = 1);
-    float GetScaleX(int global = 0, float tween = 1);
-    float GetScaleY(int global = 0, float tween = 1);
-    float GetScaleZ(int global = 0, float tween = 1);
+    float GetX(bool global = false, float tween = 1);
+    float GetY(bool global = false, float tween = 1);
+    float GetZ(bool global = false, float tween = 1);
+    float GetPitch(bool global = false, float tween = 1);
+    float GetYaw(bool global = false, float tween = 1);
+    float GetRoll(bool global = false, float tween = 1);
+    float GetScaleX(bool global = false, float tween = 1);
+    float GetScaleY(bool global = false, float tween = 1);
+    float GetScaleZ(bool global = false, float tween = 1);
     float GetMatElement(int row, int column);
     void Reset();
     void SetType(int collisionType, int recursive = 0);
@@ -954,12 +913,12 @@ class Mesh {
     B3D::Entity@ CollisionEntity(int collisionIndex);
     B3D::Surface@ CollisionSurface(int collisionIndex);
     int CollisionTriangle(int collisionIndex);
-    void Move(float x, float y, float z, int global = 0);
-    void Turn(float pitch, float yaw, float roll, int global = 0);
-    void Translate(float x, float y, float z, int global = 0);
-    void Position(float x, float y, float z, int global = 0);
-    void Scale(float xScale, float yScale, float zScale, int global = 0);
-    void Rotate(float pitch, float yaw, float roll, int global = 0);
+    void Move(float x, float y, float z, bool global = false);
+    void Turn(float pitch, float yaw, float roll, bool global = false);
+    void Translate(float x, float y, float z, bool global = false);
+    void Position(float x, float y, float z, bool global = false);
+    void Scale(float xScale, float yScale, float zScale, bool global = false);
+    void Rotate(float pitch, float yaw, float roll, bool global = false);
     void PointAt(B3D::Entity@ target, float roll = 0);
     void AlignToVector(float vectorX, float vectorY, float vectorZ, int axis, float rate = 1);
     float GetPitchTo(B3D::Entity@ destEntity);
@@ -973,7 +932,7 @@ class Mesh {
     float get_AnimTime() const property;
     int get_AnimLength() const property;
     int get_Animating() const property;
-    void SetParent(B3D::Entity@ parent, int global = 1);
+    void SetParent(B3D::Entity@ parent, bool global = true);
     int CountChildren();
     B3D::Entity@ GetChild(int index);
     B3D::Entity@ FindChild(string name);
@@ -1038,15 +997,15 @@ class Mesh {
 class Camera {
     B3D::Channel@ EmitSound(B3D::Sound@ entity);
     B3D::Camera@ Copy(B3D::Entity@ = null);
-    float GetX(int global = 0, float tween = 1);
-    float GetY(int global = 0, float tween = 1);
-    float GetZ(int global = 0, float tween = 1);
-    float GetPitch(int global = 0, float tween = 1);
-    float GetYaw(int global = 0, float tween = 1);
-    float GetRoll(int global = 0, float tween = 1);
-    float GetScaleX(int global = 0, float tween = 1);
-    float GetScaleY(int global = 0, float tween = 1);
-    float GetScaleZ(int global = 0, float tween = 1);
+    float GetX(bool global = false, float tween = 1);
+    float GetY(bool global = false, float tween = 1);
+    float GetZ(bool global = false, float tween = 1);
+    float GetPitch(bool global = false, float tween = 1);
+    float GetYaw(bool global = false, float tween = 1);
+    float GetRoll(bool global = false, float tween = 1);
+    float GetScaleX(bool global = false, float tween = 1);
+    float GetScaleY(bool global = false, float tween = 1);
+    float GetScaleZ(bool global = false, float tween = 1);
     float GetMatElement(int row, int column);
     void Reset();
     void SetType(int collisionType, int recursive = 0);
@@ -1073,12 +1032,12 @@ class Camera {
     B3D::Entity@ CollisionEntity(int collisionIndex);
     B3D::Surface@ CollisionSurface(int collisionIndex);
     int CollisionTriangle(int collisionIndex);
-    void Move(float x, float y, float z, int global = 0);
-    void Turn(float pitch, float yaw, float roll, int global = 0);
-    void Translate(float x, float y, float z, int global = 0);
-    void Position(float x, float y, float z, int global = 0);
-    void Scale(float xScale, float yScale, float zScale, int global = 0);
-    void Rotate(float pitch, float yaw, float roll, int global = 0);
+    void Move(float x, float y, float z, bool global = false);
+    void Turn(float pitch, float yaw, float roll, bool global = false);
+    void Translate(float x, float y, float z, bool global = false);
+    void Position(float x, float y, float z, bool global = false);
+    void Scale(float xScale, float yScale, float zScale, bool global = false);
+    void Rotate(float pitch, float yaw, float roll, bool global = false);
     void PointAt(B3D::Entity@ target, float roll = 0);
     void AlignToVector(float vectorX, float vectorY, float vectorZ, int axis, float rate = 1);
     float GetPitchTo(B3D::Entity@ destEntity);
@@ -1092,7 +1051,7 @@ class Camera {
     float get_AnimTime() const property;
     int get_AnimLength() const property;
     int get_Animating() const property;
-    void SetParent(B3D::Entity@ parent, int global = 1);
+    void SetParent(B3D::Entity@ parent, bool global = true);
     int CountChildren();
     B3D::Entity@ GetChild(int index);
     B3D::Entity@ FindChild(string name);
@@ -1140,15 +1099,15 @@ class Camera {
 class Light {
     B3D::Channel@ EmitSound(B3D::Sound@ entity);
     B3D::Light@ Copy(B3D::Entity@ = null);
-    float GetX(int global = 0, float tween = 1);
-    float GetY(int global = 0, float tween = 1);
-    float GetZ(int global = 0, float tween = 1);
-    float GetPitch(int global = 0, float tween = 1);
-    float GetYaw(int global = 0, float tween = 1);
-    float GetRoll(int global = 0, float tween = 1);
-    float GetScaleX(int global = 0, float tween = 1);
-    float GetScaleY(int global = 0, float tween = 1);
-    float GetScaleZ(int global = 0, float tween = 1);
+    float GetX(bool global = false, float tween = 1);
+    float GetY(bool global = false, float tween = 1);
+    float GetZ(bool global = false, float tween = 1);
+    float GetPitch(bool global = false, float tween = 1);
+    float GetYaw(bool global = false, float tween = 1);
+    float GetRoll(bool global = false, float tween = 1);
+    float GetScaleX(bool global = false, float tween = 1);
+    float GetScaleY(bool global = false, float tween = 1);
+    float GetScaleZ(bool global = false, float tween = 1);
     float GetMatElement(int row, int column);
     void Reset();
     void SetType(int collisionType, int recursive = 0);
@@ -1175,12 +1134,12 @@ class Light {
     B3D::Entity@ CollisionEntity(int collisionIndex);
     B3D::Surface@ CollisionSurface(int collisionIndex);
     int CollisionTriangle(int collisionIndex);
-    void Move(float x, float y, float z, int global = 0);
-    void Turn(float pitch, float yaw, float roll, int global = 0);
-    void Translate(float x, float y, float z, int global = 0);
-    void Position(float x, float y, float z, int global = 0);
-    void Scale(float xScale, float yScale, float zScale, int global = 0);
-    void Rotate(float pitch, float yaw, float roll, int global = 0);
+    void Move(float x, float y, float z, bool global = false);
+    void Turn(float pitch, float yaw, float roll, bool global = false);
+    void Translate(float x, float y, float z, bool global = false);
+    void Position(float x, float y, float z, bool global = false);
+    void Scale(float xScale, float yScale, float zScale, bool global = false);
+    void Rotate(float pitch, float yaw, float roll, bool global = false);
     void PointAt(B3D::Entity@ target, float roll = 0);
     void AlignToVector(float vectorX, float vectorY, float vectorZ, int axis, float rate = 1);
     float GetPitchTo(B3D::Entity@ destEntity);
@@ -1194,7 +1153,7 @@ class Light {
     float get_AnimTime() const property;
     int get_AnimLength() const property;
     int get_Animating() const property;
-    void SetParent(B3D::Entity@ parent, int global = 1);
+    void SetParent(B3D::Entity@ parent, bool global = true);
     int CountChildren();
     B3D::Entity@ GetChild(int index);
     B3D::Entity@ FindChild(string name);
@@ -1222,15 +1181,15 @@ class Light {
 class Pivot {
     B3D::Channel@ EmitSound(B3D::Sound@ entity);
     B3D::Pivot@ Copy(B3D::Entity@ = null);
-    float GetX(int global = 0, float tween = 1);
-    float GetY(int global = 0, float tween = 1);
-    float GetZ(int global = 0, float tween = 1);
-    float GetPitch(int global = 0, float tween = 1);
-    float GetYaw(int global = 0, float tween = 1);
-    float GetRoll(int global = 0, float tween = 1);
-    float GetScaleX(int global = 0, float tween = 1);
-    float GetScaleY(int global = 0, float tween = 1);
-    float GetScaleZ(int global = 0, float tween = 1);
+    float GetX(bool global = false, float tween = 1);
+    float GetY(bool global = false, float tween = 1);
+    float GetZ(bool global = false, float tween = 1);
+    float GetPitch(bool global = false, float tween = 1);
+    float GetYaw(bool global = false, float tween = 1);
+    float GetRoll(bool global = false, float tween = 1);
+    float GetScaleX(bool global = false, float tween = 1);
+    float GetScaleY(bool global = false, float tween = 1);
+    float GetScaleZ(bool global = false, float tween = 1);
     float GetMatElement(int row, int column);
     void Reset();
     void SetType(int collisionType, int recursive = 0);
@@ -1257,12 +1216,12 @@ class Pivot {
     B3D::Entity@ CollisionEntity(int collisionIndex);
     B3D::Surface@ CollisionSurface(int collisionIndex);
     int CollisionTriangle(int collisionIndex);
-    void Move(float x, float y, float z, int global = 0);
-    void Turn(float pitch, float yaw, float roll, int global = 0);
-    void Translate(float x, float y, float z, int global = 0);
-    void Position(float x, float y, float z, int global = 0);
-    void Scale(float xScale, float yScale, float zScale, int global = 0);
-    void Rotate(float pitch, float yaw, float roll, int global = 0);
+    void Move(float x, float y, float z, bool global = false);
+    void Turn(float pitch, float yaw, float roll, bool global = false);
+    void Translate(float x, float y, float z, bool global = false);
+    void Position(float x, float y, float z, bool global = false);
+    void Scale(float xScale, float yScale, float zScale, bool global = false);
+    void Rotate(float pitch, float yaw, float roll, bool global = false);
     void PointAt(B3D::Entity@ target, float roll = 0);
     void AlignToVector(float vectorX, float vectorY, float vectorZ, int axis, float rate = 1);
     float GetPitchTo(B3D::Entity@ destEntity);
@@ -1276,7 +1235,7 @@ class Pivot {
     float get_AnimTime() const property;
     int get_AnimLength() const property;
     int get_Animating() const property;
-    void SetParent(B3D::Entity@ parent, int global = 1);
+    void SetParent(B3D::Entity@ parent, bool global = true);
     int CountChildren();
     B3D::Entity@ GetChild(int index);
     B3D::Entity@ FindChild(string name);
@@ -1300,15 +1259,15 @@ class Pivot {
 class Sprite {
     B3D::Channel@ EmitSound(B3D::Sound@ entity);
     B3D::Sprite@ Copy(B3D::Entity@ = null);
-    float GetX(int global = 0, float tween = 1);
-    float GetY(int global = 0, float tween = 1);
-    float GetZ(int global = 0, float tween = 1);
-    float GetPitch(int global = 0, float tween = 1);
-    float GetYaw(int global = 0, float tween = 1);
-    float GetRoll(int global = 0, float tween = 1);
-    float GetScaleX(int global = 0, float tween = 1);
-    float GetScaleY(int global = 0, float tween = 1);
-    float GetScaleZ(int global = 0, float tween = 1);
+    float GetX(bool global = false, float tween = 1);
+    float GetY(bool global = false, float tween = 1);
+    float GetZ(bool global = false, float tween = 1);
+    float GetPitch(bool global = false, float tween = 1);
+    float GetYaw(bool global = false, float tween = 1);
+    float GetRoll(bool global = false, float tween = 1);
+    float GetScaleX(bool global = false, float tween = 1);
+    float GetScaleY(bool global = false, float tween = 1);
+    float GetScaleZ(bool global = false, float tween = 1);
     float GetMatElement(int row, int column);
     void Reset();
     void SetType(int collisionType, int recursive = 0);
@@ -1335,12 +1294,12 @@ class Sprite {
     B3D::Entity@ CollisionEntity(int collisionIndex);
     B3D::Surface@ CollisionSurface(int collisionIndex);
     int CollisionTriangle(int collisionIndex);
-    void Move(float x, float y, float z, int global = 0);
-    void Turn(float pitch, float yaw, float roll, int global = 0);
-    void Translate(float x, float y, float z, int global = 0);
-    void Position(float x, float y, float z, int global = 0);
-    void Scale(float xScale, float yScale, float zScale, int global = 0);
-    void Rotate(float pitch, float yaw, float roll, int global = 0);
+    void Move(float x, float y, float z, bool global = false);
+    void Turn(float pitch, float yaw, float roll, bool global = false);
+    void Translate(float x, float y, float z, bool global = false);
+    void Position(float x, float y, float z, bool global = false);
+    void Scale(float xScale, float yScale, float zScale, bool global = false);
+    void Rotate(float pitch, float yaw, float roll, bool global = false);
     void PointAt(B3D::Entity@ target, float roll = 0);
     void AlignToVector(float vectorX, float vectorY, float vectorZ, int axis, float rate = 1);
     float GetPitchTo(B3D::Entity@ destEntity);
@@ -1354,7 +1313,7 @@ class Sprite {
     float get_AnimTime() const property;
     int get_AnimLength() const property;
     int get_Animating() const property;
-    void SetParent(B3D::Entity@ parent, int global = 1);
+    void SetParent(B3D::Entity@ parent, bool global = true);
     int CountChildren();
     B3D::Entity@ GetChild(int index);
     B3D::Entity@ FindChild(string name);
@@ -1401,15 +1360,15 @@ class Sprite {
 class Plane {
     B3D::Channel@ EmitSound(B3D::Sound@ entity);
     B3D::Plane@ Copy(B3D::Entity@ = null);
-    float GetX(int global = 0, float tween = 1);
-    float GetY(int global = 0, float tween = 1);
-    float GetZ(int global = 0, float tween = 1);
-    float GetPitch(int global = 0, float tween = 1);
-    float GetYaw(int global = 0, float tween = 1);
-    float GetRoll(int global = 0, float tween = 1);
-    float GetScaleX(int global = 0, float tween = 1);
-    float GetScaleY(int global = 0, float tween = 1);
-    float GetScaleZ(int global = 0, float tween = 1);
+    float GetX(bool global = false, float tween = 1);
+    float GetY(bool global = false, float tween = 1);
+    float GetZ(bool global = false, float tween = 1);
+    float GetPitch(bool global = false, float tween = 1);
+    float GetYaw(bool global = false, float tween = 1);
+    float GetRoll(bool global = false, float tween = 1);
+    float GetScaleX(bool global = false, float tween = 1);
+    float GetScaleY(bool global = false, float tween = 1);
+    float GetScaleZ(bool global = false, float tween = 1);
     float GetMatElement(int row, int column);
     void Reset();
     void SetType(int collisionType, int recursive = 0);
@@ -1436,12 +1395,12 @@ class Plane {
     B3D::Entity@ CollisionEntity(int collisionIndex);
     B3D::Surface@ CollisionSurface(int collisionIndex);
     int CollisionTriangle(int collisionIndex);
-    void Move(float x, float y, float z, int global = 0);
-    void Turn(float pitch, float yaw, float roll, int global = 0);
-    void Translate(float x, float y, float z, int global = 0);
-    void Position(float x, float y, float z, int global = 0);
-    void Scale(float xScale, float yScale, float zScale, int global = 0);
-    void Rotate(float pitch, float yaw, float roll, int global = 0);
+    void Move(float x, float y, float z, bool global = false);
+    void Turn(float pitch, float yaw, float roll, bool global = false);
+    void Translate(float x, float y, float z, bool global = false);
+    void Position(float x, float y, float z, bool global = false);
+    void Scale(float xScale, float yScale, float zScale, bool global = false);
+    void Rotate(float pitch, float yaw, float roll, bool global = false);
     void PointAt(B3D::Entity@ target, float roll = 0);
     void AlignToVector(float vectorX, float vectorY, float vectorZ, int axis, float rate = 1);
     float GetPitchTo(B3D::Entity@ destEntity);
@@ -1455,7 +1414,7 @@ class Plane {
     float get_AnimTime() const property;
     int get_AnimLength() const property;
     int get_Animating() const property;
-    void SetParent(B3D::Entity@ parent, int global = 1);
+    void SetParent(B3D::Entity@ parent, bool global = true);
     int CountChildren();
     B3D::Entity@ GetChild(int index);
     B3D::Entity@ FindChild(string name);
@@ -1498,15 +1457,15 @@ class Plane {
 class Terrain {
     B3D::Channel@ EmitSound(B3D::Sound@ entity);
     B3D::Terrain@ Copy(B3D::Entity@ = null);
-    float GetX(int global = 0, float tween = 1);
-    float GetY(int global = 0, float tween = 1);
-    float GetZ(int global = 0, float tween = 1);
-    float GetPitch(int global = 0, float tween = 1);
-    float GetYaw(int global = 0, float tween = 1);
-    float GetRoll(int global = 0, float tween = 1);
-    float GetScaleX(int global = 0, float tween = 1);
-    float GetScaleY(int global = 0, float tween = 1);
-    float GetScaleZ(int global = 0, float tween = 1);
+    float GetX(bool global = false, float tween = 1);
+    float GetY(bool global = false, float tween = 1);
+    float GetZ(bool global = false, float tween = 1);
+    float GetPitch(bool global = false, float tween = 1);
+    float GetYaw(bool global = false, float tween = 1);
+    float GetRoll(bool global = false, float tween = 1);
+    float GetScaleX(bool global = false, float tween = 1);
+    float GetScaleY(bool global = false, float tween = 1);
+    float GetScaleZ(bool global = false, float tween = 1);
     float GetMatElement(int row, int column);
     void Reset();
     void SetType(int collisionType, int recursive = 0);
@@ -1533,12 +1492,12 @@ class Terrain {
     B3D::Entity@ CollisionEntity(int collisionIndex);
     B3D::Surface@ CollisionSurface(int collisionIndex);
     int CollisionTriangle(int collisionIndex);
-    void Move(float x, float y, float z, int global = 0);
-    void Turn(float pitch, float yaw, float roll, int global = 0);
-    void Translate(float x, float y, float z, int global = 0);
-    void Position(float x, float y, float z, int global = 0);
-    void Scale(float xScale, float yScale, float zScale, int global = 0);
-    void Rotate(float pitch, float yaw, float roll, int global = 0);
+    void Move(float x, float y, float z, bool global = false);
+    void Turn(float pitch, float yaw, float roll, bool global = false);
+    void Translate(float x, float y, float z, bool global = false);
+    void Position(float x, float y, float z, bool global = false);
+    void Scale(float xScale, float yScale, float zScale, bool global = false);
+    void Rotate(float pitch, float yaw, float roll, bool global = false);
     void PointAt(B3D::Entity@ target, float roll = 0);
     void AlignToVector(float vectorX, float vectorY, float vectorZ, int axis, float rate = 1);
     float GetPitchTo(B3D::Entity@ destEntity);
@@ -1552,7 +1511,7 @@ class Terrain {
     float get_AnimTime() const property;
     int get_AnimLength() const property;
     int get_Animating() const property;
-    void SetParent(B3D::Entity@ parent, int global = 1);
+    void SetParent(B3D::Entity@ parent, bool global = true);
     int CountChildren();
     B3D::Entity@ GetChild(int index);
     B3D::Entity@ FindChild(string name);
@@ -1603,15 +1562,15 @@ class Terrain {
 class Listener {
     B3D::Channel@ EmitSound(B3D::Sound@ entity);
     B3D::Listener@ Copy(B3D::Entity@ = null);
-    float GetX(int global = 0, float tween = 1);
-    float GetY(int global = 0, float tween = 1);
-    float GetZ(int global = 0, float tween = 1);
-    float GetPitch(int global = 0, float tween = 1);
-    float GetYaw(int global = 0, float tween = 1);
-    float GetRoll(int global = 0, float tween = 1);
-    float GetScaleX(int global = 0, float tween = 1);
-    float GetScaleY(int global = 0, float tween = 1);
-    float GetScaleZ(int global = 0, float tween = 1);
+    float GetX(bool global = false, float tween = 1);
+    float GetY(bool global = false, float tween = 1);
+    float GetZ(bool global = false, float tween = 1);
+    float GetPitch(bool global = false, float tween = 1);
+    float GetYaw(bool global = false, float tween = 1);
+    float GetRoll(bool global = false, float tween = 1);
+    float GetScaleX(bool global = false, float tween = 1);
+    float GetScaleY(bool global = false, float tween = 1);
+    float GetScaleZ(bool global = false, float tween = 1);
     float GetMatElement(int row, int column);
     void Reset();
     void SetType(int collisionType, int recursive = 0);
@@ -1638,12 +1597,12 @@ class Listener {
     B3D::Entity@ CollisionEntity(int collisionIndex);
     B3D::Surface@ CollisionSurface(int collisionIndex);
     int CollisionTriangle(int collisionIndex);
-    void Move(float x, float y, float z, int global = 0);
-    void Turn(float pitch, float yaw, float roll, int global = 0);
-    void Translate(float x, float y, float z, int global = 0);
-    void Position(float x, float y, float z, int global = 0);
-    void Scale(float xScale, float yScale, float zScale, int global = 0);
-    void Rotate(float pitch, float yaw, float roll, int global = 0);
+    void Move(float x, float y, float z, bool global = false);
+    void Turn(float pitch, float yaw, float roll, bool global = false);
+    void Translate(float x, float y, float z, bool global = false);
+    void Position(float x, float y, float z, bool global = false);
+    void Scale(float xScale, float yScale, float zScale, bool global = false);
+    void Rotate(float pitch, float yaw, float roll, bool global = false);
     void PointAt(B3D::Entity@ target, float roll = 0);
     void AlignToVector(float vectorX, float vectorY, float vectorZ, int axis, float rate = 1);
     float GetPitchTo(B3D::Entity@ destEntity);
@@ -1657,7 +1616,7 @@ class Listener {
     float get_AnimTime() const property;
     int get_AnimLength() const property;
     int get_Animating() const property;
-    void SetParent(B3D::Entity@ parent, int global = 1);
+    void SetParent(B3D::Entity@ parent, bool global = true);
     int CountChildren();
     B3D::Entity@ GetChild(int index);
     B3D::Entity@ FindChild(string name);

@@ -4,6 +4,10 @@ using namespace CB;
 #include "randomitems.as"
 #include "015.as"
 
+void Hook_Initialize() {
+    Register015Room("")
+}
+
 void Hook_InitializeEvents() {
     CreateEvent("kce_018cc", "kce_018cc", 0, 1);
 }
@@ -22,8 +26,8 @@ void Hook_FillRoom(Room@ r) {
         r.Objects[1].Position(r.X - 720 / 256.f, r.Y - 4224 / 256.f, r.Z, true);
         r.Objects[1].SetParent(r.Object);
     }
-    else if(r.Template.Name == "room079") {
-        Generate015Nightmare(r);
+    else if(r.Template.Name == "kce_015cc") {
+        Generate015Nightmare();
     }
 }
 void Hook_PostFillRoom(Room@ r) {
