@@ -5,11 +5,12 @@ using namespace CB;
 #include "015.as"
 
 void Hook_Initialize() {
-    Register015Room("")
+    Register015Room("kce_015_hall", RoomShape015::TWO_WAY, 100);
 }
 
 void Hook_InitializeEvents() {
     CreateEvent("kce_018cc", "kce_018cc", 0, 1);
+    CreateEvent("kce_015cc", "kce_015cc", 0, 1);
 }
 
 void Hook_FillRoom(Room@ r) {
@@ -35,7 +36,17 @@ void Hook_PostFillRoom(Room@ r) {
 }
 
 void Hook_UpdateEvent(Event@ e) {
-    if (e.Name == "kce_018cc") {
+    if (e.Name == "kce_018cc" && Player::CurrentRoom == e.Room) {
         e.State2 = UpdateElevator(e.State2, e.Room.Doors[0], e.Room.Doors[1], e.Room.Objects[0], e.Room.Objects[1], e);
+    }
+    else if (e.Name == "kce_015cc") {
+        if (Player::CurrentRoom == e.Room) {
+            //e.State2 = UpdateElevator(e.State2, e.Room.Doors[0], e.Room.Doors[1], e.Room.Objects[0], e.Room.Objects[1], e);
+            e.State += 1;
+            if (e.State > 300) {
+                Player::Collider.Position(60, 60, 60, true);
+                e.State = 0;
+            }
+        }
     }
 }

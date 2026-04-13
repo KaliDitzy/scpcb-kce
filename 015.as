@@ -26,15 +26,24 @@ void Register015Room(string name, RoomShape015 shape, int weight) {
     roomWeights.InsertLast(weight);
 }
 
-void Create015Room(string name, RoomDirection015 direction, float x, float y, float z) {
-    string@ roomDirectory = "GFX/map/015/";
+int directionToDegrees(RoomDirection015 direction) {
+    if (direction == RoomDirection015::FORWARD) { return 0; }
+    else if (direction == RoomDirection015::RIGHT) { return 90; }
+    else if (direction == RoomDirection015::BACKWARD) { return 180; }
+    else if (direction == RoomDirection015::LEFT) { return 270; }
+    return 0;
+}
+
+void Create015Room(const string name, RoomDirection015 direction, float x, float y, float z) {
+    string roomDirectory = "GFX/map/015/";
     Pivot@ room = LoadRMesh(roomDirectory + name + ".rm");
     room.Position(x, y, z, true);
+    room.Rotate(0, directionToDegrees(direction), 0, true);
 }
 
 void Generate015Nightmare() {
-    const int originX = 15360;
-    const int originY = 15360;
-    const int originZ = 15360;
+    const int originX = 60;
+    const int originY = 60;
+    const int originZ = 60;
     Create015Room(roomNames[0], RoomDirection015::FORWARD, originX, originY, originZ);
 }
