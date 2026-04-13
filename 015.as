@@ -37,13 +37,20 @@ int directionToDegrees(RoomDirection015 direction) {
 void Create015Room(const string name, RoomDirection015 direction, float x, float y, float z) {
     string roomDirectory = "GFX/map/015/";
     Pivot@ room = LoadRMesh(roomDirectory + name + ".rm");
+    room.Scale(1 / 256.f, 1 / 256.f, 1 / 256.f, true);
     room.Position(x, y, z, true);
     room.Rotate(0, directionToDegrees(direction), 0, true);
+}
+
+int GridPos(float n) {
+    return n * 4;
 }
 
 void Generate015Nightmare() {
     const int originX = 60;
     const int originY = 60;
     const int originZ = 60;
-    Create015Room("kce_015_hall", RoomDirection015::FORWARD, originX, originY, originZ);
+    for (int i = 0; i < 10; i++) {
+        Create015Room("kce_015_hall", RoomDirection015::FORWARD, originX, originY, originZ + GridPos(i));
+    }
 }

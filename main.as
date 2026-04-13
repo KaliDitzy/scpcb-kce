@@ -44,8 +44,10 @@ void Hook_UpdateEvent(Event@ e) {
         if (playerIsInRoom) {
             //e.State2 = UpdateElevator(e.State2, e.Room.Doors[0], e.Room.Doors[1], e.Room.Objects[0], e.Room.Objects[1], e);
             e.State += 1;
+            if (e.State > 100) { Player::BlinkTimer = 0; }
             if (e.State > 300) {
-                Player::Collider.Position(60, 60, 60, true);
+                Player::Collider.Position(60, 60.7f, 60, true);
+                Player::Collider.Reset();
                 e.State = 0;
             }
         }
