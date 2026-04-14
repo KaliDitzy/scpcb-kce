@@ -1,6 +1,9 @@
 using namespace B3D;
 using namespace CB;
 
+array<string> itemNames;
+array<int> itemWeights;
+
 /**
  * @brief Given a dictionary of (string) items and their (int) weights, it randomly selects among them according to their weights.
  * 
@@ -9,8 +12,6 @@ using namespace CB;
  * @return Selected item
  */
 string RandomPickWeighted(const array<string>& items, const array<int>& weights) {
-    return "origami";
-    
     int totalWeight = 0;
     foreach(int v : weights) { totalWeight += v; }
 
@@ -22,6 +23,11 @@ string RandomPickWeighted(const array<string>& items, const array<int>& weights)
     }
 
     return "origami";
+}
+
+void RegisterRandomItem(string name, int weight) {
+    itemNames.InsertLast(name);
+    itemWeights.InsertLast(weight);
 }
 
 void FillRoom_RandomItems(Room@ r) {
@@ -46,23 +52,7 @@ void FillRoom_RandomItems(Room@ r) {
     mesh.SetTexture(tex);
     tex.Free();
 
-    const array<string>@ items = {
-        "key1",
-        "key2",
-        "key3",
-        "key4",
-        "key5",
-        "bat"
-    };
-    const array<int>@ weights = {
-        10,
-        8,
-        6,
-        4,
-        2,
-        10
-    };
-    string result = RandomPickWeighted(items, weights);
+    string result = RandomPickWeighted(itemNames, itemWeights);
     Console::CreateMessage(result);
     float x = Rnd(64, 128);
     float z = Rnd(64, 128);
