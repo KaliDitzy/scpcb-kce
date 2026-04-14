@@ -63,7 +63,21 @@ bool Hook_FillRoom(Room@ r) {
         r.Objects[1].Position(r.X - 720 / 256.f, r.Y - 4224 / 256.f, r.Z, true);
         r.Objects[1].SetParent(r.Object);
     }
-    else if(r.Template.Name == "kce_015cc") { Generate015Nightmare(); }
+    else if(r.Template.Name == "kce_015cc") {
+        // == Elevator Doors ==
+        // Enter
+        @r.Doors[0] = Door(r.Zone, r.X - 416 / 256.f, r.Y, r.Z + 720 / 256.f, 270, r, true, 3); r.Doors[0].AutoClose = false; r.Doors[0].Open = true;
+        @r.Objects[0] = Pivot::Create();
+        r.Objects[0].Position(r.X - 720 / 256.f, r.Y, r.Z + 720 / 256.f, true);
+        r.Objects[0].SetParent(r.Object);
+        // Exit
+        @r.Doors[1] = Door(r.Zone, r.X - 416 / 256.f, r.Y - 4096 / 256.f, r.Z + 720 / 256.f, 270, r, false, 3); r.Doors[1].AutoClose = false; r.Doors[1].Open = false;
+        @r.Objects[1] = Pivot::Create();
+        r.Objects[1].Position(r.X - 720 / 256.f, r.Y - 4096 / 256.f, r.Z + 720 / 256.f, true);
+        r.Objects[1].SetParent(r.Object);
+
+        Generate015Nightmare();
+    }
 
     return false;
 }
@@ -80,7 +94,14 @@ bool Hook_UpdateEvent(Event@ e) {
     }
     else if (e.Name == "kce_015cc") {
         if (playerIsInRoom) {
-            //e.State2 = UpdateElevator(e.State2, e.Room.Doors[0], e.Room.Doors[1], e.Room.Objects[0], e.Room.Objects[1], e);
+            e.State2 = UpdateElevator(e.State2, e.Room.Doors[0], e.Room.Doors[1], e.Room.Objects[0], e.Room.Objects[1], e);
+
+            if (Player::Collider.GetY(true) < e.Room.Y - 2048 / 256.f && Player::Collider.GetX(true) > e.Room.X + 192 / 256.f) {
+                Player::BlinkTimer = 0;
+                Player::Collider.Position(120, 120.7F, 120, true);
+                Player::Collider.Rotate(0, 0, 0, true);
+                Player::Collider.Reset();
+            }
         }
     }
 
