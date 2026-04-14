@@ -51,6 +51,6 @@ void Generate015Nightmare() {
     const int originY = 60;
     const int originZ = 60;
     for (int i = 0; i < 10; i++) {
-        Create015Room("kce_015_hall", RoomDirection015::FORWARD, originX, originY, originZ + GridPos(i));
+        Create015Room(roomNames[0], RoomDirection015::FORWARD, originX, originY, originZ + GridPos(i));
     }
 }
