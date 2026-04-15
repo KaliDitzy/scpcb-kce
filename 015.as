@@ -79,17 +79,15 @@ void Generate015Nightmare() {
     const int originZ = 120;
 
     // generate one part of 015
-    bool generatedDivergeLastIteration = false;
     for (int i = -10; i < 10; i++) {
-        if (!generatedDivergeLastIteration && Rnd(0, 1) > 0.75f) {
+        if (Rnd(0, 1) > 0.75f) {
             int roomIndex = RandomStringPickWeightedIndex015(THREE_WAY);
 
             int direction = Rand(0,1);
-            int numberOfRooms = Rand(1,4);
             if (direction == 0) {
                 Create015Room(roomNames[roomIndex], RoomDirection015::RIGHT, originX, originY, originZ + GridPos(i));
 
-                for (int j = 0; j < numberOfRooms; j++) {
+                for (int j = 0; j < 10; j++) {
                     roomIndex = RandomStringPickWeightedIndex015(TWO_WAY);
                     Create015Room(roomNames[roomIndex], RoomDirection015::LEFT, originX + GridPos(j + 1), originY, originZ + GridPos(i));
                 }
@@ -97,19 +95,15 @@ void Generate015Nightmare() {
             else {
                 Create015Room(roomNames[roomIndex], RoomDirection015::LEFT, originX, originY, originZ + GridPos(i));
 
-                for (int j = 0; j < numberOfRooms; j++) {
+                for (int j = 0; j < 10; j++) {
                     roomIndex = RandomStringPickWeightedIndex015(TWO_WAY);
                     Create015Room(roomNames[roomIndex], RoomDirection015::RIGHT, originX - GridPos(j + 1), originY, originZ + GridPos(i));
                 }
             }
-
-            generatedDivergeLastIteration = true;
         }
         else {
             int roomIndex = RandomStringPickWeightedIndex015(TWO_WAY);
             Create015Room(roomNames[roomIndex], RoomDirection015::FORWARD, originX, originY, originZ + GridPos(i));
-
-            generatedDivergeLastIteration = false;
         }
     }
 }

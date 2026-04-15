@@ -1,3 +1,6 @@
+using namespace B3D;
+using namespace CB;
+
 /**
  * @brief Given a dictionary of strings and their (int) weights, it randomly selects among them according to their weights.
  * 
