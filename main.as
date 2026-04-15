@@ -118,7 +118,7 @@ bool Hook_UpdateEvent(Event@ e) {
                     }
                 }
             }
-            
+
             /*for (int i = 0; i < triggers.Length; i++) {
                 Trigger@ v = triggers[i];
                 if (v.RoomName() == e.Room.Template.Name) {
