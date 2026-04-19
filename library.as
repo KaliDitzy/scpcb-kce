@@ -66,3 +66,17 @@ int RandomStringPickWeightedIndex(const array<string>& strings, const array<int>
 
     return "";
 }*/
+
+int RandomBiasedLow(int min, int max)
+{
+    int a = Rand(min, max);
+    int b = Rand(min, max);
+    return a < b ? a : b;
+}
+
+int RandomBiasedHigh(int min, int max)
+{
+    int a = Rand(min, max);
+    int b = Rand(min, max);
+    return a > b ? a : b;
+}

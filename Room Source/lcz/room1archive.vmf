@@ -27,7 +27,7 @@ viewsettings
     "bSnapToGrid" "1"
     "bShowGrid" "1"
     "bShow3DGrid" "0"
-    "nGridSpacing" "32"
+    "nGridSpacing" "16"
     "bIgnoreGrouping" "0"
     "bHideFaceMask" "0"
     "bHideToolTextures" "0"
@@ -24420,8 +24420,8 @@ cameras
     "activecamera" "0"
     camera
     {
-        "position" "[-123.60920000 -804.65410000 241.71670000]"
-        "look" "[-186.78380000 -735.70060000 220.02660000]"
+        "position" "[553.18850000 -248.49640000 268.91110000]"
+        "look" "[560.38960000 -176.54930000 205.76180000]"
     }
 }
 cordon

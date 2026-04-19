@@ -1,11 +1,49 @@
 using namespace B3D;
 using namespace CB;
 
+#include "library.as"
 #include "triggers.as"
 #include "randomitems.as"
 #include "015.as"
 
 bool playerInside015 = false;
+
+array<string> archiveItemNames;
+array<int> archiveItemWeights2;
+array<int> archiveItemWeights3;
+array<int> archiveItemWeights4;
+
+void RegisterArchiveItem(string itemName, int level2Weight, int level3Weight, int level4Weight) {
+    archiveItemNames.InsertLast(itemName);
+    archiveItemWeights2.InsertLast(level2Weight);
+    archiveItemWeights3.InsertLast(level3Weight);
+    archiveItemWeights4.InsertLast(level4Weight);
+}
+
+void SpawnItems(Room@ r, float x, float y, float z, int maxItems, float spacing, const array<string>& strings, const array<int>& weights) {
+    int numItems = RandomBiasedHigh(0, maxItems);
+    float middle = (numItems - 1) / 2.f;
+    for (int i = 0; i < numItems; i++) {
+        string result = RandomStringPickWeighted(strings, weights);
+        float offset = (i - middle) * spacing;
+
+        Item@ it = Item(result, r.X + x / 256.f, r.Y + y / 256.f, r.Z + (z + offset) / 256.f);
+        it.Collider.Rotate(0, Rnd(0,360), 0);
+        it.Collider.SetParent(r.Object);
+    }
+}
+void SpawnItemsLow(Room@ r, float x, float y, float z, int maxItems, float spacing, const array<string>& strings, const array<int>& weights) {
+    int numItems = RandomBiasedLow(0, maxItems);
+    float middle = (numItems - 1) / 2.f;
+    for (int i = 0; i < numItems; i++) {
+        string result = RandomStringPickWeighted(strings, weights);
+        float offset = (i - middle) * spacing;
+
+        Item@ it = Item(result, r.X + x / 256.f, r.Y + y / 256.f, r.Z + (z + offset) / 256.f);
+        it.Collider.Rotate(0, Rnd(0,360), 0);
+        it.Collider.SetParent(r.Object);
+    }
+}
 
 bool Hook_Initialize() {
     RegisterRandomItem("key1", 20);
@@ -42,6 +80,48 @@ bool Hook_Initialize() {
     Register015Room("kce_015_hall", RoomShape015::TWO_WAY, 100);
     Register015Room("kce_015_fork", RoomShape015::THREE_WAY, 100);
 
+    RegisterArchiveItem("clipboard", 15, 15, 5);
+    RegisterArchiveItem("finefirstaid", 1, 5, 20);
+    RegisterArchiveItem("firstaid", 30, 50, 100);
+    RegisterArchiveItem("gasmask", 75, 50, 50);
+    RegisterArchiveItem("supernv", 0, 10, 50);
+    RegisterArchiveItem("nvgoggles", 0, 30, 100);
+    RegisterArchiveItem("radio", 25, 50, 100);
+    RegisterArchiveItem("snav", 50, 100, 25);
+    RegisterArchiveItem("key1", 100, 50, 25);
+    RegisterArchiveItem("key2", 30, 50, 15);
+    RegisterArchiveItem("key3", 10, 50, 100);
+    RegisterArchiveItem("key4", 0, 2, 50);
+    RegisterArchiveItem("key5", 0, 0, 2);
+    RegisterArchiveItem("bat", 120, 100, 50);
+    RegisterArchiveItem("doc008", 0, 1, 5);
+    RegisterArchiveItem("doc012", 1, 5, 5);
+    RegisterArchiveItem("doc035", 2, 5, 5);
+    RegisterArchiveItem("doc049", 1, 5, 5);
+    RegisterArchiveItem("doc079", 0, 1, 5);
+    RegisterArchiveItem("doc096", 0, 1, 5);
+    RegisterArchiveItem("doc106", 0, 1, 5);
+    RegisterArchiveItem("doc173", 5, 5, 5);
+    RegisterArchiveItem("doc372", 5, 5, 1);
+    RegisterArchiveItem("doc427", 2, 5, 5);
+    RegisterArchiveItem("doc500", 0, 1, 5);
+    RegisterArchiveItem("doc513", 1, 5, 5);
+    RegisterArchiveItem("doc682", 0, 1, 5);
+    RegisterArchiveItem("doc714", 5, 5, 1);
+    RegisterArchiveItem("doc860", 0, 1, 5);
+    RegisterArchiveItem("doc895", 1, 5, 5);
+    RegisterArchiveItem("doc939", 5, 5, 5);
+    RegisterArchiveItem("doc966", 1, 5, 5);
+    RegisterArchiveItem("doc970", 5, 5, 5);
+    RegisterArchiveItem("doc1048", 1, 5, 5);
+    RegisterArchiveItem("doc1123", 1, 5, 5);
+    RegisterArchiveItem("doc1162", 1, 5, 5);
+    RegisterArchiveItem("doc1499", 1, 5, 5);
+    RegisterArchiveItem("doc8601", 1, 5, 5);
+    RegisterArchiveItem("origami", 10, 25, 25);
+    RegisterArchiveItem("mastercard", 10, 25, 25);
+    RegisterArchiveItem("playingcard", 10, 25, 25);
+
     return false;
 }
 
@@ -53,7 +133,31 @@ bool Hook_InitializeEvents() {
 }
 
 bool Hook_FillRoom(Room@ r) {
-    if(r.Template.Name == "kce_018cc") {
+    if(r.Template.Name == "room1archive") {
+        // level 2
+        SpawnItems(r, -720, 160, -128, 3, 64, archiveItemNames, archiveItemWeights2);
+        SpawnItems(r, -720, 160, 256, 3, 64, archiveItemNames, archiveItemWeights2);
+        SpawnItems(r, -720, 160, 720, 1, 64, archiveItemNames, archiveItemWeights2);
+
+        SpawnItems(r, -368, 160, -128, 3, 64, archiveItemNames, archiveItemWeights2);
+        SpawnItems(r, -368, 160, 224, 2, 64, archiveItemNames, archiveItemWeights2);
+        SpawnItems(r, -368, 160, 640, 3, 64, archiveItemNames, archiveItemWeights2);
+        // level 3
+        SpawnItems(r, -144, 160, -112, 2, 64, archiveItemNames, archiveItemWeights3);
+        SpawnItems(r, -144, 160, 256, 3, 64, archiveItemNames, archiveItemWeights3);
+        SpawnItems(r, -144, 160, 640, 3, 64, archiveItemNames, archiveItemWeights3);
+
+        SpawnItems(r, 144, 160, -64, 2, 64, archiveItemNames, archiveItemWeights3);
+        SpawnItems(r, 144, 160, 256, 3, 64, archiveItemNames, archiveItemWeights3);
+        // level 4
+        
+        SpawnItemsLow(r, -720, 160, 688, 2, 64, archiveItemNames, archiveItemWeights4);
+
+        SpawnItemsLow(r, 368, 160, -128, 3, 64, archiveItemNames, archiveItemWeights4);
+
+        return true;
+    }
+    else if(r.Template.Name == "kce_018cc") {
         // == Elevator Doors ==
         // Enter
         @r.Doors[0] = Door(r.Zone, r.X - 416 / 256.f, r.Y, r.Z, 270, r, true, 3); r.Doors[0].AutoClose = false; r.Doors[0].Open = true;
@@ -95,7 +199,10 @@ bool Hook_PostFillRoom(Room@ r) {
 
 bool Hook_UpdateEvent(Event@ e) {
     bool playerIsInRoom = (@e.Room == @Player::CurrentRoom);
-    if (e.Name == "kce_018cc" && playerIsInRoom) {
+    if (e.Name == "room1archive") {
+        return true;
+    }
+    else if (e.Name == "kce_018cc" && playerIsInRoom) {
         e.State2 = UpdateElevator(e.State2, e.Room.Doors[0], e.Room.Doors[1], e.Room.Objects[0], e.Room.Objects[1], e);
     }
     else if (e.Name == "kce_015cc") {
