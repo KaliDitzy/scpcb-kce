@@ -95,6 +95,8 @@ bool Hook_Initialize() {
     RegisterArchiveItem("bat", 120, 100, 50);
     RegisterArchiveItem("doc008", 0, 1, 5);
     RegisterArchiveItem("doc012", 1, 5, 5);
+    RegisterArchiveItem("doc015", 1, 5, 5);
+    RegisterArchiveItem("doc018", 5, 5, 5);
     RegisterArchiveItem("doc035", 2, 5, 5);
     RegisterArchiveItem("doc049", 1, 5, 5);
     RegisterArchiveItem("doc079", 0, 1, 5);

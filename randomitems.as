@@ -34,7 +34,6 @@ void FillRoom_RandomItems(Room@ r) {
     tex.Free();
 
     string result = RandomStringPickWeighted(itemNames, itemWeights);
-    Console::CreateMessage(result);
     float x = Rnd(64, 128);
     float z = Rnd(64, 128);
     Item@ it = Item(result, targetX + x / 256.f, targetY, targetZ + z / 256.f);
