@@ -210,35 +210,6 @@ bool Hook_UpdateEvent(Event@ e) {
         if (playerIsInRoom && !playerInside015) {
             e.State2 = UpdateElevator(e.State2, e.Room.Doors[0], e.Room.Doors[1], e.Room.Objects[0], e.Room.Objects[1], e);
 
-            /*if (BetterCheckTriggers(e.Room.Triggerbox, Player::Collider) == "enter015") {
-                Player::BlinkTimer = 0;
-                Player::Collider.Position(120 + Rnd(-0.5f, 0.5f), 120.6F, 120 + Rnd(-0.5f, 0.5f), true);
-                Player::Collider.Rotate(0, 0, 0, true);
-                Player::Collider.Reset();
-
-                Player::DeathMessage = deathMsg;
-                playerInside015 = true;
-            }*/
-
-            /*Console::CreateMessage("yeah yeah", 255, 0, 255);
-            if (Player::Collider.GetX(true) >= e.Room.X + 128 / 256.f && Player::Collider.GetX(true) <= e.Room.X + 384 / 256.f) {
-                Console::CreateMessage("yeah yeah", 0, 0, 255);
-                if (Player::Collider.GetY(true) >= e.Room.Y - 4096 / 256.f && Player::Collider.GetY(true) <= e.Room.Y - 3584 / 256.f) {
-                    Console::CreateMessage("yeah yeah", 0, 0, 196);
-                    if (Player::Collider.GetZ(true) >= e.Room.Z + 448 / 256.f && Player::Collider.GetZ(true) <= e.Room.Z + 960 / 256.f) {
-                        Console::CreateMessage("yeah yeah", 0, 0, 128);
-                        Player::BlinkTimer = 0;
-                        Player::Collider.Position(120 + Rnd(-0.5f, 0.5f), 120.6F, 120 + Rnd(-0.5f, 0.5f), true);
-                        Player::Collider.Rotate(0, 0, 0, true);
-                        Player::Collider.Reset();
-
-                        Player::KillTimer = 120;
-                        Player::DeathMessage = deathMsg;
-                        playerInside015 = true;
-                    }
-                }
-            }*/
-
             if (Triggerbox::Check(e.Room, Player::Collider.GetX(true), Player::Collider.GetY(true), Player::Collider.GetZ(true)) == "enter015") {
                 Player::BlinkTimer = 0;
                 Player::Collider.Position(120 + Rnd(-0.5f, 0.5f), 120.6F, 120 + Rnd(-0.5f, 0.5f), true);
