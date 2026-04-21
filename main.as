@@ -183,9 +183,6 @@ bool Hook_FillRoom(Room@ r) {
         r.Objects[1].Position(r.X - 720 / 256.f, r.Y - 4096 / 256.f, r.Z + 720 / 256.f, true);
         r.Objects[1].SetParent(r.Object);
 
-        //Triggers
-        //RegisterTrigger("enter015", r.Template.Name, r.X + 128 / 256.f, r.Y - 4096 / 256.f, r.Z + 448 / 256.f, r.X + 384 / 256.f, r.Y - 3584 / 256.f, r.Z + 960 / 256.f);
-
         Generate015Nightmare();
     }
 
