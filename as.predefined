@@ -339,6 +339,12 @@ B3D::Font@ LoadFont(string file, int height, bool bold = false, bool italic = fa
 B3D::Effect@ LoadEffect(string file);
 }
 
+namespace CB::Particles {
+void Initialize(B3D::Camera@ camera);
+void Update();
+void FreeAll();
+}
+
 namespace CB::Waypoint {
 CB::Waypoint@ get_First() property;
 CB::Waypoint@ get_Last() property;
@@ -359,6 +365,11 @@ CB::Door@ get_First() property;
 CB::Door@ get_Last() property;
 }
 
+namespace CB::TempTriggerbox {
+CB::TempTriggerbox@ get_First() property;
+CB::TempTriggerbox@ get_Last() property;
+}
+
 namespace CB::TempItem {
 CB::TempItem@ get_First() property;
 CB::TempItem@ get_Last() property;
@@ -377,6 +388,12 @@ CB::RoomTemplate@ get_Last() property;
 namespace CB::TempWaypoint {
 CB::TempWaypoint@ get_First() property;
 CB::TempWaypoint@ get_Last() property;
+}
+
+namespace CB::Triggerbox {
+CB::Triggerbox@ get_First() property;
+CB::Triggerbox@ get_Last() property;
+string Check(CB::Room@ room, float x, float y, float z);
 }
 
 namespace CB::Forest {
@@ -768,6 +785,8 @@ class Entity {
     const B3D::Pivot@ opCast() const;
     B3D::Listener@ opCast();
     const B3D::Listener@ opCast() const;
+    CB::ParticleEmitter@ opCast();
+    const CB::ParticleEmitter@ opCast() const;
 }
 
 class Model {
@@ -1659,6 +1678,115 @@ class Stream {
     bool get_IsPlaying() property;
 }
 
+class ParticleEmitter {
+    B3D::Channel@ EmitSound(B3D::Sound@ entity);
+    CB::ParticleEmitter@ Copy(B3D::Entity@ = null);
+    float GetX(bool global = false, float tween = 1);
+    float GetY(bool global = false, float tween = 1);
+    float GetZ(bool global = false, float tween = 1);
+    float GetPitch(bool global = false, float tween = 1);
+    float GetYaw(bool global = false, float tween = 1);
+    float GetRoll(bool global = false, float tween = 1);
+    float GetScaleX(bool global = false, float tween = 1);
+    float GetScaleY(bool global = false, float tween = 1);
+    float GetScaleZ(bool global = false, float tween = 1);
+    float GetMatElement(int row, int column);
+    void Reset();
+    void SetType(int collisionType, int recursive = 0);
+    void SetPickMode(int pickGeometry, int obscurer = 1);
+    void GetPickMode(int pickGeometry, int obscurer);
+    B3D::Entity@ GetParent();
+    int GetEntityType();
+    void SetRadius(float xRadius, float yRadius = 0);
+    void SetBox(float x, float y, float z, float width, float height, float depth);
+    void GetBox(int x, int y, int z, int width, int height, int depth);
+    float Distance(B3D::Entity@ destinationEntity);
+    float DistanceSquared(B3D::Entity@ destinationEntity);
+    B3D::Entity@ Pick(float range);
+    int CanSee(B3D::Entity@ destEntity);
+    B3D::Entity@ Collided(int type);
+    int CountCollisions();
+    float CollisionX(int collisionIndex);
+    float CollisionY(int collisionIndex);
+    float CollisionZ(int collisionIndex);
+    float CollisionNX(int collisionIndex);
+    float CollisionNY(int collisionIndex);
+    float CollisionNZ(int collisionIndex);
+    float CollisionTime(int collisionIndex);
+    B3D::Entity@ CollisionEntity(int collisionIndex);
+    B3D::Surface@ CollisionSurface(int collisionIndex);
+    int CollisionTriangle(int collisionIndex);
+    void Move(float x, float y, float z, bool global = false);
+    void Turn(float pitch, float yaw, float roll, bool global = false);
+    void Translate(float x, float y, float z, bool global = false);
+    void Position(float x, float y, float z, bool global = false);
+    void Scale(float xScale, float yScale, float zScale, bool global = false);
+    void Rotate(float pitch, float yaw, float roll, bool global = false);
+    void PointAt(B3D::Entity@ target, float roll = 0);
+    void AlignToVector(float vectorX, float vectorY, float vectorZ, int axis, float rate = 1);
+    float GetPitchTo(B3D::Entity@ destEntity);
+    float GetYawTo(B3D::Entity@ destEntity);
+    void SetAnimTime(float time, int animSeq = 0);
+    void Animate(int mode = 1, float speed = 1, int sequence = 0, float transition = 0);
+    void SetAnimKey(int frame, int posKey = 1, int rotKey = 1, int scaleKey = 1);
+    int AddAnimSeq(int length);
+    int ExtractAnimSeq(int firstFrame, int lastFrame, int animSeq = 0);
+    int get_AnimSeq() const property;
+    float get_AnimTime() const property;
+    int get_AnimLength() const property;
+    int get_Animating() const property;
+    void SetParent(B3D::Entity@ parent, bool global = true);
+    int CountChildren();
+    B3D::Entity@ GetChild(int index);
+    B3D::Entity@ FindChild(string name);
+    void SetInstance(B3D::Entity@ parent);
+    B3D::Entity@ GetInstance();
+    void Hide();
+    void Show();
+    int get_IsHidden() const property;
+    int get_Exists() const property;
+    void Free();
+    void set_Name(string name) property;
+    string get_Name() const property;
+    string get_Filename() const property;
+    string get_Class() const property;
+    void set_Mask(int mask) property;
+    int get_Mask() const property;
+    B3D::Entity@ opImplCast();
+    const B3D::Entity@ opImplCast() const;
+    void Free(bool deleteParticles = true);
+    void Freeze();
+    void Unfreeze();
+}
+
+class ParticleTemplate {
+    void Free();
+    void set_EmitterBlend(int value) property;
+    void set_Interval(int value) property;
+    void set_ParticlesPerInterval(int value) property;
+    void set_MaxParticles(int value) property;
+    void set_EmitterLifeTime(int value) property;
+    void set_Gravity(float value) property;
+    void set_Alpha(float value) property;
+    void set_AlphaVel(bool value) property;
+    void set_Brightness(int value) property;
+    void set_Yaw(float value) property;
+    void SetParticleLifeTime(int minTime, int maxTime);
+    void SetTexture(string path, int mode = 0, int blend = 1);
+    void SetAnimatedTexture(string path, int mode, int blend, int width, int height, int maxFrames, float speed = 1);
+    void SetOffset(float minX, float maxX, float minY, float maxY, float minZ, float maxZ);
+    void SetVelocity(float minX, float maxX, float minY, float maxY, float minZ, float maxZ);
+    void SetRotation(float minRotationSpeed, float maxRotationSpeed);
+    void SetAlignToFall(bool alignToFall, int alignOffset = 0);
+    void SetSize(float x, float y, float minMultiplier = 1, float maxMultiplier = 1);
+    void SetSizeVelocity(float add, float mult);
+    void SetColors(int col1, int col2);
+    void SetFloor(float y, float bounce = 0.5);
+    void SetFixAngles(int pitch, int yaw);
+    void AddSubTemplate(CB::ParticleTemplate@ template);
+    CB::ParticleEmitter@ Emit(B3D::Entity@ owner, bool fixed = false);
+}
+
 class Waypoint {
     B3D::Pivot@ Object;
     CB::Door@ Door;
@@ -1806,9 +1934,7 @@ class Room {
     carray<B3D::Sprite@> LightSprites2;
     carray<int> LightHidden;
     carray<int> LightFlicker;
-    int TriggerboxAmount;
-    carray<B3D::Mesh@> Triggerbox;
-    carray<string> TriggerboxName;
+    CB::Triggerbox@ FirstTriggerbox;
     float MaxWayPointY;
     carray<float> LightR;
     carray<float> LightG;
@@ -1861,6 +1987,17 @@ class Door {
     CB::Door@ get_Previous() const property;
     void InsertAfter(CB::Door@);
     void InsertBefore(CB::Door@);
+}
+
+class TempTriggerbox {
+    B3D::Mesh@ Object;
+    string Name;
+    CB::TempTriggerbox@ Successor;
+    void Delete();
+    CB::TempTriggerbox@ get_Next() const property;
+    CB::TempTriggerbox@ get_Previous() const property;
+    void InsertAfter(CB::TempTriggerbox@);
+    void InsertBefore(CB::TempTriggerbox@);
 }
 
 class TempItem {
@@ -1935,9 +2072,7 @@ class RoomTemplate {
     int R;
     int G;
     int B;
-    int TempTriggerboxAmount;
-    carray<B3D::Mesh@> TempTriggerbox;
-    carray<string> TempTriggerboxName;
+    CB::TempTriggerbox@ FirstTempTriggerbox;
     CB::TempItem@ FirstTempItem;
     CB::TempDoor@ FirstTempDoor;
     bool UseLightCones;
@@ -1965,6 +2100,17 @@ class TempWaypoint {
     CB::TempWaypoint@ get_Previous() const property;
     void InsertAfter(CB::TempWaypoint@);
     void InsertBefore(CB::TempWaypoint@);
+}
+
+class Triggerbox {
+    B3D::Mesh@ Object;
+    string Name;
+    CB::Triggerbox@ Successor;
+    void Delete();
+    CB::Triggerbox@ get_Next() const property;
+    CB::Triggerbox@ get_Previous() const property;
+    void InsertAfter(CB::Triggerbox@);
+    void InsertBefore(CB::Triggerbox@);
 }
 
 class Forest {
@@ -2181,7 +2327,6 @@ bool ConsoleEnabled;
 bool ConsoleAutoOpen;
 bool SpeedRunMode;
 bool NumericSeeds;
-bool DebugResourcePackStrictLoad;
 bool DebugMapGen;
 bool DebugForestGen;
 int ParticleAmount;

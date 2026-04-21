@@ -220,7 +220,7 @@ bool Hook_UpdateEvent(Event@ e) {
                 playerInside015 = true;
             }*/
 
-            Console::CreateMessage("yeah yeah", 255, 0, 255);
+            /*Console::CreateMessage("yeah yeah", 255, 0, 255);
             if (Player::Collider.GetX(true) >= e.Room.X + 128 / 256.f && Player::Collider.GetX(true) <= e.Room.X + 384 / 256.f) {
                 Console::CreateMessage("yeah yeah", 0, 0, 255);
                 if (Player::Collider.GetY(true) >= e.Room.Y - 4096 / 256.f && Player::Collider.GetY(true) <= e.Room.Y - 3584 / 256.f) {
@@ -237,28 +237,24 @@ bool Hook_UpdateEvent(Event@ e) {
                         playerInside015 = true;
                     }
                 }
-            }
-
-            /*for (int i = 0; i < triggers.Length; i++) {
-                Trigger@ v = triggers[i];
-                if (v.RoomName() == e.Room.Template.Name) {
-                    if (v.Inside(@Player::Collider) && v.Name() == "enter015") {
-                        Player::BlinkTimer = 0;
-                        Player::Collider.Position(120 + Rnd(-0.5f, 0.5f), 120.6F, 120 + Rnd(-0.5f, 0.5f), true);
-                        Player::Collider.Rotate(0, 0, 0, true);
-                        Player::Collider.Reset();
-
-                        Player::DeathMessage = deathMsg;
-                        playerInside015 = true;
-                    }
-                }
             }*/
+
+            if (Triggerbox::Check(e.Room, Player::Collider.GetX(true), Player::Collider.GetY(true), Player::Collider.GetZ(true)) == "enter015") {
+                Player::BlinkTimer = 0;
+                Player::Collider.Position(120 + Rnd(-0.5f, 0.5f), 120.6F, 120 + Rnd(-0.5f, 0.5f), true);
+                Player::Collider.Rotate(0, 0, 0, true);
+                Player::Collider.Reset();
+
+                Player::KillTimer = 120;
+                Player::DeathMessage = deathMsg;
+                playerInside015 = true;
+            }
         }
         else if (playerInside015) {
             const int maxRange = 25;
-            Console::CreateMessage("yeah yeah", 196, 0, 255);
+            //Console::CreateMessage("yeah yeah", 196, 0, 255);
             if ((Player::Collider.GetX(true) > 120 + maxRange || Player::Collider.GetX(true) < 120 - maxRange) || (Player::Collider.GetZ(true) > 120 + maxRange || Player::Collider.GetZ(true) < 120 - maxRange)) {
-                Console::CreateMessage("yeah yeah", 0, 64, 255);
+                //Console::CreateMessage("yeah yeah", 0, 64, 255);
 
                 Player::BlinkTimer = 0;
                 Player::Collider.Position(120 + Rnd(-0.5f, 0.5f), Player::Collider.GetY(true) + 0.05f, 120 + Rnd(-0.5f, 0.5f), true);
