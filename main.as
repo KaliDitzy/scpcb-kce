@@ -2,7 +2,6 @@ using namespace B3D;
 using namespace CB;
 
 #include "library.as"
-#include "triggers.as"
 #include "randomitems.as"
 #include "015.as"
 
