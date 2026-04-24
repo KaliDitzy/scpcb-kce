@@ -243,6 +243,10 @@ bool Hook_UpdateEvent(Event@ e) {
                 Lost015();
             }
         }
+
+        if (playerIsInRoom && (Player::Collider.GetX(true) < -1 || playerInside015)) {
+            // play music
+        }
     }
 
     return false;
