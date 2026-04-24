@@ -184,6 +184,12 @@ bool Hook_FillRoom(Room@ r) {
         r.Objects[1].Position(r.X - 720 / 256.f, r.Y - 4096 / 256.f, r.Z + 720 / 256.f, true);
         r.Objects[1].SetParent(r.Object);
 
+        // stupid models wont load with rmesh
+        //@r.Objects[2] = LoadMesh("GFX\\map\\Props\\015_entrance.x", r.Object);
+        //r.Objects[2].Rotate(0, 90, 0, true);
+        //r.Objects[2].Position(r.X - 1504 / 256.f, r.Y - 4608 / 256.f, r.Z - 256 / 256.f, true);
+        
+
         Generate015Nightmare();
     }
 

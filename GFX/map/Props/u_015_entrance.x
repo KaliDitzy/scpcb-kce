@@ -8,7 +8,7 @@ Frame Bone {
  }
 }
 
-Mesh 015_entrance {
+Mesh u_015_entrance {
  3888;
  85.269409;328.792542;474.073914;,
  85.269409;328.817932;511.999786;,
@@ -17521,14 +17521,14 @@ Mesh 015_entrance {
   0,
   0;
 
-  Material 015entrance {
+  Material u_015_entrance {
    0.800000;0.800000;0.800000;1.000000;;
    0.000000;
    0.500000;0.500000;0.500000;;
    1.000000;1.000000;1.000000;;
 
    TextureFilename {
-    "015_entrance.png";
+    "u_015_entrance.png";
    }
   }
  }
