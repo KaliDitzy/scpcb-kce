@@ -53142,7 +53142,7 @@ entity
 {
     "id" "1008"
     "classname" "model"
-    "file" "u_015_entrance"
+    "file" "015_entrance"
     "angles" "0 90 0"
     "scale" "1 1 1"
     "position" "-1504 -4608 -256"
@@ -53160,7 +53160,7 @@ entity
 {
     "id" "1009"
     "classname" "model"
-    "file" "u_015_hall"
+    "file" "015_hall"
     "angles" "360 90 360"
     "scale" "1 1 1"
     "position" "-2528 -4608 -256"
@@ -53178,7 +53178,7 @@ entity
 {
     "id" "1010"
     "classname" "model"
-    "file" "u_015_hall"
+    "file" "015_hall"
     "angles" "360 90 360"
     "scale" "1 1 1"
     "position" "-3552 -4608 -256"
@@ -53324,8 +53324,8 @@ cameras
     "activecamera" "0"
     camera
     {
-        "position" "[-2077.91200000 -316.52740000 -4468.86000000]"
-        "look" "[-15436.89000000 4049.10500000 -3082.61700000]"
+        "position" "[-2105.18400000 -1014.92900000 -4106.66900000]"
+        "look" "[-5901.34500000 11842.37000000 -8547.59200000]"
     }
 }
 cordon

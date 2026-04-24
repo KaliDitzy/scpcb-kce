@@ -63,7 +63,7 @@ int directionToDegrees(RoomDirection015 direction) {
 
 void Create015Room(const string name, RoomDirection015 direction, float x, float y, float z) {
     string roomDirectory = "GFX/map/";
-    Pivot@ room = LoadRMesh(roomDirectory + name + ".rm");
+    Pivot@ room = LoadRMesh(roomDirectory + name + ".rmesh");
     room.Scale(1 / 256.f, 1 / 256.f, 1 / 256.f, true);
     room.Position(x, y, z, true);
     room.Rotate(0, directionToDegrees(direction), 0, true);
@@ -80,11 +80,11 @@ void Generate015Nightmare() {
 
     // generate one part of 015
     for (int i = -10; i < 10; i++) {
-        if (Rnd(0, 1) > 0.75f) {
+        if (Rnd(0, 1) > 0.75f && false) { // UNUSED FOR NOW
             int roomIndex = RandomStringPickWeightedIndex015(THREE_WAY);
 
             int direction = Rand(0,1);
-            if (direction == 0) {
+            if (direction == 0e) {
                 Create015Room(roomNames[roomIndex], RoomDirection015::RIGHT, originX, originY, originZ + GridPos(i));
 
                 for (int j = 0; j < 10; j++) {
@@ -106,4 +106,33 @@ void Generate015Nightmare() {
             Create015Room(roomNames[roomIndex], RoomDirection015::FORWARD, originX, originY, originZ + GridPos(i));
         }
     }
+}
+
+int lostCounter_015 = 0;
+const string lostMsg1_015 = "\"Wait... which way is out, again?\"";
+const string lostMsg2_015 = "You feel hopeless.";
+const string lostMsg3_015 = "Your mouth is becoming dry, and you are very hungry.";
+const string lostMsg4_015 = "You are starting to feel faint.";
+
+void Lost015() {
+    lostCounter_015++;
+
+    switch(lostCounter_015) {
+        case 1:
+            Player::Message = lostMsg1_015;
+            break;
+        case 2:
+            Player::Message = lostMsg2_015;
+            break;
+        case 3:
+            Player::Message = lostMsg3_015;
+            break;
+        case 4:
+            Player::Message = lostMsg4_015;
+            break;
+        default:
+            Player::Message = "";
+            break;
+    }
+    Player::MessageTimer = 70 * 7;
 }

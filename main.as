@@ -5,12 +5,13 @@ using namespace CB;
 #include "randomitems.as"
 #include "015.as"
 
-bool playerInside015 = false;
-
 array<string> archiveItemNames;
 array<int> archiveItemWeights2;
 array<int> archiveItemWeights3;
 array<int> archiveItemWeights4;
+
+bool playerInside015 = false;
+const string deathMsg_015 = "A severely mutilated D-Class was discovered within SCP-015, the subject appeared thin likely from extended malnourishment prior to their expiration.\nSCP-015 grew plumbing through, in, and around the subject's body, rendering it unrecognizable at first glance, though DNA testing later revealed the identity of the corpse as belonging to D-9341.";
 
 void RegisterArchiveItem(string itemName, int level2Weight, int level3Weight, int level4Weight) {
     archiveItemNames.InsertLast(itemName);
@@ -210,7 +211,6 @@ bool Hook_UpdateEvent(Event@ e) {
         e.State2 = UpdateElevator(e.State2, e.Room.Doors[0], e.Room.Doors[1], e.Room.Objects[0], e.Room.Objects[1], e);
     }
     else if (e.Name == "kce_015cc") {
-        const string deathMsg = "A severely mutilated D-Class was discovered within SCP-015, the subject appeared thin likely from extended malnourishment prior to their expiration.\nSCP-015 grew plumbing through, in, and around the subject's body, rendering it unrecognizable at first glance, though DNA testing later revealed the identity of the corpse as belonging to D-9341.";
         if (playerIsInRoom && !playerInside015) {
             e.State2 = UpdateElevator(e.State2, e.Room.Doors[0], e.Room.Doors[1], e.Room.Objects[0], e.Room.Objects[1], e);
 
@@ -221,8 +221,9 @@ bool Hook_UpdateEvent(Event@ e) {
                 Player::Collider.Reset();
 
                 Player::KillTimer = 120;
-                Player::DeathMessage = deathMsg;
+                Player::DeathMessage = deathMsg_015;
                 playerInside015 = true;
+                Lost015();
             }
         }
         else if (playerInside015) {
@@ -236,9 +237,10 @@ bool Hook_UpdateEvent(Event@ e) {
                 Player::Collider.Rotate(0, Rand(0,1)*180, 0, true);
                 Player::Collider.Reset();
 
-                Player::DeathMessage = deathMsg;
+                Player::DeathMessage = deathMsg_015;
                 Player::Injuries += (1.f/5.f);
                 Player::Bloodloss += (100.f/5.f);
+                Lost015();
             }
         }
     }

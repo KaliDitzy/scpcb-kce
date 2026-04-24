@@ -17528,7 +17528,7 @@ Mesh u_015_entrance {
    1.000000;1.000000;1.000000;;
 
    TextureFilename {
-    "u_015_entrance.png";
+    "015_entrance.png";
    }
   }
  }

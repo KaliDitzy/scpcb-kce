@@ -17542,7 +17542,7 @@ Mesh u_015_hall {
    1.000000;1.000000;1.000000;;
 
    TextureFilename {
-    "u_015_hall.png";
+    "015_hall.png";
    }
   }
  }
