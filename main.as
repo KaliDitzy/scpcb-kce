@@ -83,6 +83,7 @@ bool Hook_Initialize() {
     Register015Room("kce_015_fork_left", RoomShape015::FORK_LEFT, 100);
     Register015Room("kce_015_fork_right", RoomShape015::FORK_RIGHT, 100);
     Register015Pipes("1");
+    Register015Pipes("2");
 
     RegisterArchiveItem("clipboard", 15, 15, 5);
     RegisterArchiveItem("finefirstaid", 1, 5, 20);
@@ -156,9 +157,7 @@ bool Hook_FillRoom(Room@ r) {
         SpawnItems(r, 144, 160, -64, 2, 64, archiveItemNames, archiveItemWeights3);
         SpawnItems(r, 144, 160, 256, 3, 64, archiveItemNames, archiveItemWeights3);
         // level 4
-        
         SpawnItemsLow(r, -720, 160, 688, 2, 64, archiveItemNames, archiveItemWeights4);
-
         SpawnItemsLow(r, 368, 160, -128, 3, 64, archiveItemNames, archiveItemWeights4);
 
         return true;
@@ -175,6 +174,19 @@ bool Hook_FillRoom(Room@ r) {
         @r.Objects[1] = Pivot::Create();
         r.Objects[1].Position(r.X - 720 / 256.f, r.Y - 4224 / 256.f, r.Z, true);
         r.Objects[1].SetParent(r.Object);
+
+        /*
+        Sprite@ spotlight = Sprite::Create(r.Object);
+        spotlight.Position(0, 2, 0, false);
+        spotlight.Scale(0.5, 1, 1, true);
+
+        Texture@ spotlightTex = LoadTexture("GFX\\spotlightsprite.png", 1);
+        spotlight.SetTexture(spotlightTex);
+        spotlight.set_Blend(3);
+        spotlight.SetOrder(-1);
+        spotlight.SetFX(1);
+        spotlight.SetViewMode(0);
+        */
     }
     else if(r.Template.Name == "kce_015cc") {
         // == Elevator Doors ==
@@ -220,7 +232,7 @@ bool Hook_UpdateEvent(Event@ e) {
 
             if (Triggerbox::Check(e.Room, Player::Collider.GetX(true), Player::Collider.GetY(true), Player::Collider.GetZ(true)) == "enter015") {
                 Player::BlinkTimer = 0;
-                Player::Collider.Position(120 + Rnd(-0.5f, 0.5f), 120.6F, 120 + Rnd(-0.5f, 0.5f), true);
+                Player::Collider.Position(120 + Rnd(-0.4f, 0.4f), 120.6F, 120 + Rnd(-0.5f, 0.5f), true);
                 Player::Collider.Rotate(0, 0, 0, true);
                 Player::Collider.Reset();
 
@@ -232,12 +244,10 @@ bool Hook_UpdateEvent(Event@ e) {
         }
         else if (playerInside015) {
             const int maxRange = 25;
-            //Console::CreateMessage("yeah yeah", 196, 0, 255);
+            
             if ((Player::Collider.GetX(true) > 120 + maxRange || Player::Collider.GetX(true) < 120 - maxRange) || (Player::Collider.GetZ(true) > 120 + maxRange || Player::Collider.GetZ(true) < 120 - maxRange)) {
-                //Console::CreateMessage("yeah yeah", 0, 64, 255);
-
                 Player::BlinkTimer = 0;
-                Player::Collider.Position(120 + Rnd(-0.5f, 0.5f), Player::Collider.GetY(true) + 0.05f, 120 + Rnd(-0.5f, 0.5f), true);
+                Player::Collider.Position(120 + Rnd(-0.4f, 0.4f), Player::Collider.GetY(true) + 0.05f, 120 + Rnd(-0.5f, 0.5f), true);
                 Player::Collider.Rotate(0, Rand(0,1)*180, 0, true);
                 Player::Collider.Reset();
 

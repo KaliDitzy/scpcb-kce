@@ -43,6 +43,13 @@ int RandomStringPickWeightedIndex(const array<string>& strings, const array<int>
     return 0;
 }
 
+//! Randomly picks two numbers within the provided range and picks the smallest number.
+/*!
+    \param min The minimum integer possible.
+    \param max The maximum integer possible.
+    \return Selected integer.
+    \sa RandomBiasedHigh()
+*/
 int RandomBiasedLow(int min, int max)
 {
     int a = Rand(min, max);
@@ -50,6 +57,13 @@ int RandomBiasedLow(int min, int max)
     return a < b ? a : b;
 }
 
+//! Randomly picks two numbers within the provided range and picks the biggest number.
+/*!
+    \param min The minimum integer possible.
+    \param max The maximum integer possible.
+    \return Selected integer.
+    \sa RandomBiasedLow()
+*/
 int RandomBiasedHigh(int min, int max)
 {
     int a = Rand(min, max);
