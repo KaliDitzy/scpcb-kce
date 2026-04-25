@@ -54,6 +54,8 @@ bool Hook_Initialize() {
     RegisterRandomItem("bat", 20);
     RegisterRandomItem("doc008", 1);
     RegisterRandomItem("doc012", 1);
+    RegisterRandomItem("doc015", 1);
+    RegisterRandomItem("doc018", 1);
     RegisterRandomItem("doc035", 1);
     RegisterRandomItem("doc049", 1);
     RegisterRandomItem("doc079", 1);
@@ -78,7 +80,9 @@ bool Hook_Initialize() {
     RegisterRandomItem("doc8601", 1);
 
     Register015Room("kce_015_hall", RoomShape015::TWO_WAY, 100);
-    Register015Room("kce_015_fork", RoomShape015::THREE_WAY, 100);
+    Register015Room("kce_015_fork_left", RoomShape015::FORK_LEFT, 100);
+    Register015Room("kce_015_fork_right", RoomShape015::FORK_RIGHT, 100);
+    Register015Pipes("1");
 
     RegisterArchiveItem("clipboard", 15, 15, 5);
     RegisterArchiveItem("finefirstaid", 1, 5, 20);

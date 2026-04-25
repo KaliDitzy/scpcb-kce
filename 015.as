@@ -29,11 +29,9 @@ int RandomStringPickWeightedIndex015(const RoomShape015 desiredShape) {
 }
 
 enum RoomShape015 {
-    ONE_WAY,
     TWO_WAY,
-    TWO_WAY_CORNER,
-    THREE_WAY,
-    FOUR_WAY
+    FORK_LEFT,
+    FORK_RIGHT
 }
 
 enum RoomDirection015 {
@@ -47,10 +45,16 @@ array<string> roomNames;
 array<RoomShape015> roomShapes;
 array<int> roomWeights;
 
+array<string> pipes;
+
 void Register015Room(string name, RoomShape015 shape, int weight) {
     roomNames.InsertLast(name);
     roomShapes.InsertLast(shape);
     roomWeights.InsertLast(weight);
+}
+
+void Register015Pipes(string name) {
+    pipes.InsertLast(name);
 }
 
 int directionToDegrees(RoomDirection015 direction) {
@@ -67,6 +71,24 @@ void Create015Room(const string name, RoomDirection015 direction, float x, float
     room.Scale(1 / 256.f, 1 / 256.f, 1 / 256.f, true);
     room.Position(x, y, z, true);
     room.Rotate(0, directionToDegrees(direction), 0, true);
+
+    if (name.Find("left") == -1) {
+        const string meshName = pipes[Rand(0, pipes.Length - 1)];
+        Mesh@ Mesh = LoadMesh("GFX\\map\\props\\015_pipes_" + meshName + ".b3d", room);
+        Mesh.Position(Mesh.GetX(true), Mesh.GetY(true) - (25.61607f / 256.f), Mesh.GetZ(true), true);
+        Mesh.SetType(1);
+    }
+
+    if (name.Find("right") == -1) {
+        const string meshName = pipes[Rand(0, pipes.Length - 1)];
+        Mesh@ Mesh = LoadMesh("GFX\\map\\props\\015_pipes_" + meshName + ".b3d", room);
+        Mesh.Position(Mesh.GetX(true), Mesh.GetY(true) - (25.61607f / 256.f), Mesh.GetZ(true), true);
+        Mesh.Rotate(0,180,0);
+        Mesh.SetType(1);
+    }
+
+    //const string rightName = leftPipes[Rand(0, rightPipes.Length - 1)];
+    //Mesh@ rightMesh = LoadMesh("GFX\\map\\props\\015_pipes_right_" + rightName + ".b3d", room);
 }
 
 int GridPos(float n) {
@@ -80,12 +102,12 @@ void Generate015Nightmare() {
 
     // generate one part of 015
     for (int i = -10; i < 10; i++) {
-        if (Rnd(0, 1) > 0.75f && false) { // UNUSED FOR NOW
-            int roomIndex = RandomStringPickWeightedIndex015(THREE_WAY);
+        if (Rnd(0, 1) > 0.75f) { // UNUSED FOR NOW
 
             int direction = Rand(0,1);
-            if (direction == 0e) {
-                Create015Room(roomNames[roomIndex], RoomDirection015::RIGHT, originX, originY, originZ + GridPos(i));
+            if (direction == 0) {
+                int roomIndex = RandomStringPickWeightedIndex015(FORK_RIGHT);
+                Create015Room(roomNames[roomIndex], RoomDirection015::FORWARD, originX, originY, originZ + GridPos(i));
 
                 for (int j = 0; j < 10; j++) {
                     roomIndex = RandomStringPickWeightedIndex015(TWO_WAY);
@@ -93,7 +115,8 @@ void Generate015Nightmare() {
                 }
             }
             else {
-                Create015Room(roomNames[roomIndex], RoomDirection015::LEFT, originX, originY, originZ + GridPos(i));
+                int roomIndex = RandomStringPickWeightedIndex015(FORK_LEFT);
+                Create015Room(roomNames[roomIndex], RoomDirection015::FORWARD, originX, originY, originZ + GridPos(i));
 
                 for (int j = 0; j < 10; j++) {
                     roomIndex = RandomStringPickWeightedIndex015(TWO_WAY);
