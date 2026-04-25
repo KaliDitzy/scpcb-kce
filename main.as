@@ -215,6 +215,19 @@ bool Hook_FillRoom(Room@ r) {
 bool Hook_PostFillRoom(Room@ r) {
     FillRoom_RandomItems(r);
 
+    if (r.Template.Name == "kce_015cc") {
+        NPC@ scp131a = NPC(NPC::Type::ClassD, -131, -131, -131);
+        NPC@ scp131b = NPC(NPC::Type::ClassD, -131, -131, -131);
+
+        scp131a.ID = 13101;
+        scp131a.Collider.SetRadius(0.125, 0.125);
+        scp131a.Idle = 30;
+
+        scp131b.ID = 13102;
+        scp131b.Collider.SetRadius(0.125, 0.125);
+        scp131b.Idle = 30;
+    }
+
     return false;
 }
 
@@ -263,5 +276,51 @@ bool Hook_UpdateEvent(Event@ e) {
         }
     }
 
+    return false;
+}
+
+bool Hook_UpdateNPC(NPC@ n) {
+    if (n.ID >= 13101 && n.ID <= 13102) {
+        // n.State
+
+        float playerDistance = Distance(
+            n.Collider.GetX(true),
+            n.Collider.GetY(true),
+            n.Collider.GetZ(true),
+            Player::Collider.GetX(true),
+            Player::Collider.GetY(true),
+            Player::Collider.GetZ(true)
+        );
+
+        if (playerDistance > 6.f) { n.Idle += FPSFactor; } else { n.Idle = 0; }
+        
+        if (n.Idle >= 30.f) {
+            // Out of bounds, waiting to be placed.
+            n.DropSpeed = 0;
+            n.Collider.Position(-131, -131, -131);
+            n.Collider.Reset();
+
+            if (Rand(0, 1000) == 0) {
+                n.Idle = -1; // Place SCP-131.
+            }
+        }
+        else if (n.Idle < 0) {
+            // Places SCP-131.
+            float targetX = Player::CurrentRoom.X + (Rand(0,1) * 4) - 2;
+            float targetZ = Player::CurrentRoom.Z + (Rand(0,1) * 4) - 2;
+            n.Collider.Position(targetX, Player::CurrentRoom.Y + 0.35f, targetZ);
+            n.Collider.Reset();
+
+            n.DropSpeed = -0.1f;
+
+            n.Idle = 0;
+        }
+        else {
+            // SCP-131 behavior.
+            n.Collider.PointAt(Player::Collider);
+        }
+
+        return true;
+    }
     return false;
 }
