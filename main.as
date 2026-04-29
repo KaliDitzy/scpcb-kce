@@ -137,8 +137,8 @@ bool Hook_Initialize() {
 }
 
 bool Hook_InitializeEvents() {
-    CreateEvent("kce_018cc", "kce_018cc", 0, 1);
-    CreateEvent("kce_015cc", "kce_015cc", 0, 1);
+    Event::Create("kce_018cc", "kce_018cc", 0, 1);
+    Event::Create("kce_015cc", "kce_015cc", 0, 1);
 
     return false;
 }
@@ -243,11 +243,11 @@ bool Hook_UpdateEvent(Event@ e) {
         return true;
     }
     else if (e.Name == "kce_018cc" && playerIsInRoom) {
-        e.State2 = UpdateElevator(e.State2, e.Room.Doors[0], e.Room.Doors[1], e.Room.Objects[0], e.Room.Objects[1], e);
+        e.State2 = Event::UpdateElevator(e.State2, e.Room.Doors[0], e.Room.Doors[1], e.Room.Objects[0], e.Room.Objects[1], e);
     }
     else if (e.Name == "kce_015cc") {
         if (playerIsInRoom && !playerInside015) {
-            e.State2 = UpdateElevator(e.State2, e.Room.Doors[0], e.Room.Doors[1], e.Room.Objects[0], e.Room.Objects[1], e);
+            e.State2 = Event::UpdateElevator(e.State2, e.Room.Doors[0], e.Room.Doors[1], e.Room.Objects[0], e.Room.Objects[1], e);
 
             if (Triggerbox::Check(e.Room, Player::Collider.GetX(true), Player::Collider.GetY(true), Player::Collider.GetZ(true)) == "enter015") {
                 Player::BlinkTimer = 0;
@@ -279,7 +279,7 @@ bool Hook_UpdateEvent(Event@ e) {
 
         if (playerIsInRoom && (Player::Collider.GetX(true) < -1 || playerInside015)) {
             // play music
-            @Music::ShouldPlay = music015;
+            Music::ShouldPlay = music015;
         }
     }
 

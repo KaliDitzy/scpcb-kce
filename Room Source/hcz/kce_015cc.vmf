@@ -53328,7 +53328,7 @@ entity
 }
 entity
 {
-    "id" "431"
+    "id" "-1"
     "classname" "door"
     "type" "2"
     "keycard" "3"
@@ -53435,7 +53435,7 @@ entity
 }
 entity
 {
-    "id" "545"
+    "id" "-1"
     "classname" "door"
     "type" "2"
     "keycard" "0"
@@ -53799,7 +53799,7 @@ entity
 }
 entity
 {
-    "id" "717"
+    "id" "-1"
     "classname" "door"
     "type" "2"
     "keycard" "4"
@@ -54302,8 +54302,8 @@ cameras
     "activecamera" "0"
     camera
     {
-        "position" "[241.30570000 649.08180000 -3842.28300000]"
-        "look" "[-2463.38700000 -12944.42000000 -6552.36300000]"
+        "position" "[431.15210000 701.77690000 -3992.42400000]"
+        "look" "[-1206.12700000 9802.27500000 -14666.85000000]"
     }
 }
 cordon
