@@ -339,6 +339,14 @@ B3D::Font@ LoadFont(string file, int height, bool bold = false, bool italic = fa
 B3D::Effect@ LoadEffect(string file);
 }
 
+namespace CB::Sound {
+CB::Sound@ LoadTemporary(string file);
+}
+
+namespace CB::Music {
+CB::Music RegisterCustom(string file);
+}
+
 namespace CB::Particles {
 void Initialize(B3D::Camera@ camera);
 void Update();
@@ -435,6 +443,10 @@ CB::ItemTemplate@ FindTemplate(string name);
 CB::Item@ CreateCup(string drinkName, float x, float y, float z, int r, int g, int b, float a = 1);
 }
 
+namespace CB::Dreamfilter {
+void Update(float power);
+}
+
 namespace CB::Console::Msg {
 CB::Console::Msg@ get_First() property;
 CB::Console::Msg@ get_Last() property;
@@ -447,11 +459,9 @@ void CreateMessage(string txt, int r = -1, int g = -1, int b = -1, bool isComman
 namespace CB::Event {
 CB::Event@ get_First() property;
 CB::Event@ get_Last() property;
-}
-
-namespace CB {
-Event@ CreateEvent(string eventName, string roomName, int id, float probability = 0);
-float UpdateElevator(float state, Door@ door1, Door@ door2, B3D::Entity@ room1, B3D::Entity@ room2, Event@ event, bool ignorerotation = true);
+CB::Sound@ LoadSound(CB::Event@ event, string file, int num = 0);
+CB::Event@ Create(string eventName, string roomName, int id, float probability = 0);
+float UpdateElevator(float state, CB::Door@ door1, CB::Door@ door2, B3D::Entity@ room1, B3D::Entity@ room2, CB::Event@ event, bool ignorerotation = true);
 }
 
 class array<T> {
@@ -777,12 +787,20 @@ class Entity {
     int get_Mask() const property;
     B3D::Model@ opCast();
     const B3D::Model@ opCast() const;
+    B3D::Mesh@ opCast();
+    const B3D::Mesh@ opCast() const;
     B3D::Camera@ opCast();
     const B3D::Camera@ opCast() const;
     B3D::Light@ opCast();
     const B3D::Light@ opCast() const;
     B3D::Pivot@ opCast();
     const B3D::Pivot@ opCast() const;
+    B3D::Sprite@ opCast();
+    const B3D::Sprite@ opCast() const;
+    B3D::Plane@ opCast();
+    const B3D::Plane@ opCast() const;
+    B3D::Terrain@ opCast();
+    const B3D::Terrain@ opCast() const;
     B3D::Listener@ opCast();
     const B3D::Listener@ opCast() const;
     CB::ParticleEmitter@ opCast();
@@ -968,6 +986,8 @@ class Mesh {
     string get_Class() const property;
     void set_Mask(int mask) property;
     int get_Mask() const property;
+    B3D::Entity@ opImplCast();
+    const B3D::Entity@ opImplCast() const;
     float get_Alpha() const property;
     void set_Alpha(float alpha) property;
     int get_GetColorR() const property;
@@ -1349,6 +1369,8 @@ class Sprite {
     string get_Class() const property;
     void set_Mask(int mask) property;
     int get_Mask() const property;
+    B3D::Entity@ opImplCast();
+    const B3D::Entity@ opImplCast() const;
     float get_Alpha() const property;
     void set_Alpha(float alpha) property;
     int get_GetColorR() const property;
@@ -1450,6 +1472,8 @@ class Plane {
     string get_Class() const property;
     void set_Mask(int mask) property;
     int get_Mask() const property;
+    B3D::Entity@ opImplCast();
+    const B3D::Entity@ opImplCast() const;
     float get_Alpha() const property;
     void set_Alpha(float alpha) property;
     int get_GetColorR() const property;
@@ -1547,6 +1571,8 @@ class Terrain {
     string get_Class() const property;
     void set_Mask(int mask) property;
     int get_Mask() const property;
+    B3D::Entity@ opImplCast();
+    const B3D::Entity@ opImplCast() const;
     float get_Alpha() const property;
     void set_Alpha(float alpha) property;
     int get_GetColorR() const property;
@@ -1822,10 +1848,10 @@ class NPC {
     int MakingNoise;
     float Frame;
     float Angle;
-    B3D::Sound@ Sound;
+    CB::Sound@ Sound;
     B3D::Channel@ Channel;
     float SoundTimer;
-    B3D::Sound@ Sound2;
+    CB::Sound@ Sound2;
     B3D::Channel@ Channel2;
     float Speed;
     float CurrentSpeed;
@@ -1914,7 +1940,7 @@ class Room {
     B3D::Channel@ SoundCHN;
     CB::Forest@ Forest;
     carray<int> SoundEmitter;
-    carray<B3D::Pivot@> SoundEmitterObj;
+    carray<B3D::Pivot@> SoundEmitterObject;
     carray<float> SoundEmitterRange;
     carray<B3D::Channel@> SoundEmitterCHN;
     carray<B3D::Light@> Lights;
@@ -1993,6 +2019,12 @@ class TempTriggerbox {
     B3D::Mesh@ Object;
     string Name;
     CB::TempTriggerbox@ Successor;
+    float MinX;
+    float MinY;
+    float MinZ;
+    float MaxX;
+    float MaxY;
+    float MaxZ;
     void Delete();
     CB::TempTriggerbox@ get_Next() const property;
     CB::TempTriggerbox@ get_Previous() const property;
@@ -2023,6 +2055,7 @@ class TempItem {
 class TempDoor {
     int Dir;
     int KeyCard;
+    int Index;
     string Code;
     float X;
     float Y;
@@ -2260,6 +2293,8 @@ class Event {
     float State3;
     B3D::Channel@ Channel;
     B3D::Channel@ Channel2;
+    CB::Sound@ Sound;
+    CB::Sound@ Sound2;
     int ChannelIsStream;
     int Channel2IsStream;
     string String;
@@ -2330,6 +2365,11 @@ bool NumericSeeds;
 bool DebugMapGen;
 bool DebugForestGen;
 int ParticleAmount;
+}
+
+namespace CB::Music {
+CB::Music NowPlaying;
+CB::Music ShouldPlay;
 }
 
 namespace CB::Input {
@@ -2422,6 +2462,14 @@ string Message;
 string DeathMessage;
 }
 
+namespace CB::Dreamfilter {
+B3D::Texture@ Texture;
+B3D::Image@ Image;
+B3D::Camera@ Camera;
+float Volume;
+float Timer;
+}
+
 namespace CB::Console {
 bool Open;
 string Input;
@@ -2432,6 +2480,38 @@ CB::Console::Msg@ Reissue;
 int R;
 int G;
 int B;
+}
+
+namespace CB {
+enum Music {
+    LightContainmentZone,
+    HeavyContainmentZone,
+    EntranceZone,
+    PocketDimension,
+    Room079,
+    GateB1,
+    GateB2,
+    Room3Storage,
+    Room049,
+    Forest860,
+    SCP106Chase,
+    Menu,
+    Forest860Chase,
+    Intro,
+    SCP178,
+    PocketDimensionTrench,
+    Room205,
+    GateA,
+    Dimension1499,
+    Dimension1499Danger,
+    SCP049Chase,
+    EndingMenuBreath,
+    Room914,
+    Ending,
+    Credits,
+    AfterCredits,
+    Invalid
+}
 }
 
 namespace CB::NPC {
