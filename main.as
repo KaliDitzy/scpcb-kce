@@ -5,6 +5,8 @@ using namespace CB;
 #include "randomitems.as"
 #include "015.as"
 
+Music music015;
+
 array<string> archiveItemNames;
 array<int> archiveItemWeights2;
 array<int> archiveItemWeights3;
@@ -46,6 +48,8 @@ void SpawnItemsLow(Room@ r, float x, float y, float z, int maxItems, float spaci
 }
 
 bool Hook_Initialize() {
+    music015 = Music::RegisterCustom("SFX\\Music\\079.ogg");
+
     RegisterRandomItem("key1", 20);
     RegisterRandomItem("key2", 16);
     RegisterRandomItem("key3", 12);
@@ -275,6 +279,7 @@ bool Hook_UpdateEvent(Event@ e) {
 
         if (playerIsInRoom && (Player::Collider.GetX(true) < -1 || playerInside015)) {
             // play music
+            @Music::ShouldPlay = music015;
         }
     }
 
