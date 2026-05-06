@@ -255,7 +255,7 @@ bool Hook_UpdateEvent(Event@ e) {
                 Player::Collider.Rotate(0, 0, 0, true);
                 Player::Collider.Reset();
 
-                Player::KillTimer = 120;
+                Player::DeathTimer = 120;
                 Player::DeathMessage = deathMsg_015;
                 playerInside015 = true;
                 Lost015();
