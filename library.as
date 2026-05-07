@@ -1,6 +1,25 @@
 using namespace B3D;
 using namespace CB;
 
+class Vector3 {
+    float X;
+    float Y;
+    float Z;
+
+    Vector3(float x, float y, float z) {
+        this.X = x;
+        this.Y = y;
+        this.Z = z;
+    }
+
+    Vector3 From(string string) {
+        int s1 = string.Find(" ");
+        int s2 = string.Find(" ", s1 + 1);
+
+        return Vector3(string.Substring(0, s1).ParseFloat(), string.Substring(s1 + 1, s2 - s1 - 1).ParseFloat(), string.Substring(s2 + 1).ParseFloat());
+    }
+}
+
 //! Given a dictionary of strings and their (int) weights, it randomly selects among them according to their weights.
 /*!
     \param items The array of strings.

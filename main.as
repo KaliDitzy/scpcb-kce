@@ -146,24 +146,28 @@ bool Hook_InitializeEvents() {
 
 bool Hook_LoadRoomTemplateEntity(CB::RoomTemplate@ rt, int version, B3D::Stream@ f, string name) {
     if (name == "junk") {
-        f.ReadFloat();
-        f.ReadFloat();
-        f.ReadFloat();
+        float x = f.ReadFloat();
+        float y = f.ReadFloat();
+        float z = f.ReadFloat();
 
-        f.ReadString();
-        f.ReadString();
-        f.ReadString();
+        string file1 = f.ReadString();
+        string file2 = f.ReadString();
+        string file3 = f.ReadString();
 
-        f.ReadString();
-        f.ReadString();
+        Vector3 minPos = Vector3::From(f.ReadString());
+        Vector3 maxPos = Vector3::From(f.ReadString());
 
-        f.ReadString();
+        Vector3 maxRot = Vector3::From(f.ReadString());
         
-        f.ReadFloat();
-        f.ReadFloat();
+        float minScale = f.ReadFloat();
+        float maxScale = f.ReadFloat();
         
-        f.ReadInt();
-        f.ReadInt();
+        int minObj = f.ReadInt();
+        int maxObj = f.ReadInt();
+
+        RegisterTempJunk(TempJunk(x, y, z, file1, file2, file3, minPos, maxPos, maxRot, minScale, maxScale, minObj, maxObj));
+
+        return true;
     }
     return false;
 }
@@ -231,12 +235,6 @@ bool Hook_FillRoom(Room@ r) {
         r.Objects[1].Position(r.X - 720 / 256.f, r.Y - 4096 / 256.f, r.Z + 720 / 256.f, true);
         r.Objects[1].SetParent(r.Object);
 
-        // stupid models wont load with rmesh
-        //@r.Objects[2] = LoadMesh("GFX\\map\\Props\\015_entrance.x", r.Object);
-        //r.Objects[2].Rotate(0, 90, 0, true);
-        //r.Objects[2].Position(r.X - 1504 / 256.f, r.Y - 4608 / 256.f, r.Z - 256 / 256.f, true);
-        
-
         Generate015Nightmare();
     }
 
@@ -260,6 +258,10 @@ bool Hook_PostFillRoom(Room@ r) {
     }
     */
 
+    for (int i = 0; i < tempJunk.Length; i++) {
+        tempJunk[i].Spawn(@r);
+    }
+
     return false;
 }
 
@@ -281,7 +283,7 @@ bool Hook_UpdateEvent(Event@ e) {
                 Player::Collider.Rotate(0, 0, 0, true);
                 Player::Collider.Reset();
 
-                // Player::DeathTimer = 120; dunno what is going on here!
+                Player::DeathTimer = 120 * FPSFactor;
                 Player::DeathMessage = deathMsg_015;
                 playerInside015 = true;
                 Lost015();
