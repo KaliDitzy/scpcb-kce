@@ -2,6 +2,7 @@ using namespace B3D;
 using namespace CB;
 
 #include "library.as"
+#include "entities.as"
 #include "randomitems.as"
 #include "015.as"
 
@@ -142,6 +143,31 @@ bool Hook_InitializeEvents() {
 
     return false;
 }
+
+bool Hook_LoadRoomTemplateEntity(CB::RoomTemplate@ rt, int version, B3D::Stream@ f, string name) {
+    if (name == "junk") {
+        f.ReadFloat();
+        f.ReadFloat();
+        f.ReadFloat();
+
+        f.ReadString();
+        f.ReadString();
+        f.ReadString();
+
+        f.ReadString();
+        f.ReadString();
+
+        f.ReadString();
+        
+        f.ReadFloat();
+        f.ReadFloat();
+        
+        f.ReadInt();
+        f.ReadInt();
+    }
+    return false;
+}
+
 
 bool Hook_FillRoom(Room@ r) {
     if(r.Template.Name == "room1archive") {

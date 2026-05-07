@@ -1,0 +1,77 @@
+{
+  "Name": "junk",
+  "Description": "Spawns random junk.",
+  "Sprite": "sprites/junk",
+  "Properties": [
+    {
+      "Name": "model1",
+      "Type": "String",
+      "SmartEditName": "First Model",
+      "DefaultValue": "",
+      "HelpText": "The name of the first model you'd like to use."
+    },
+    {
+      "Name": "model2",
+      "Type": "String",
+      "SmartEditName": "Second Model",
+      "DefaultValue": "",
+      "HelpText": "The name of the second model you'd like to use."
+    },
+    {
+      "Name": "model3",
+      "Type": "String",
+      "SmartEditName": "Third Model",
+      "DefaultValue": "",
+      "HelpText": "The name of the third model you'd like to use."
+    },
+    {
+      "Name": "minPos",
+      "Type": "Vector",
+      "SmartEditName": "Minimum Position",
+      "DefaultValue": "0 0 0",
+      "HelpText": "The minimum position a model will spawn."
+    },
+    {
+      "Name": "maxPos",
+      "Type": "Vector",
+      "SmartEditName": "Maximum Position",
+      "DefaultValue": "0 0 0",
+      "HelpText": "The maximum position a model will spawn."
+    },
+    {
+      "Name": "maxRotation",
+      "Type": "Vector",
+      "SmartEditName": "Maximum Rotation",
+      "DefaultValue": "0 0 0",
+      "HelpText": "The maximum that a model can rotate randomly."
+    },
+    {
+      "Name": "minScale",
+      "Type": "Float",
+      "SmartEditName": "Minimum Scale",
+      "DefaultValue": "1",
+      "HelpText": "The minimum scale the models can have."
+    },
+    {
+      "Name": "maxScale",
+      "Type": "Float",
+      "SmartEditName": "Maximum Scale",
+      "DefaultValue": "1",
+      "HelpText": "The maximum scale the models can have."
+    },
+    {
+      "Name": "minObjects",
+      "Type": "Integer",
+      "SmartEditName": "Minimum Objects",
+      "DefaultValue": "1",
+      "HelpText": "The minimum amount of models that can spawn."
+    },
+    {
+      "Name": "maxObjects",
+      "Type": "Integer",
+      "SmartEditName": "Maximum Objects",
+      "DefaultValue": "1",
+      "HelpText": "The maximum amount of models that can spawn."
+    }
+  ]
+}
