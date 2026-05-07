@@ -69,7 +69,9 @@ void FillRoom_RandomItems(Room@ r) {
     body.SetNPCFrame(19);
     body.IsDead = 1;
     if ( Rnd(0,1) > 0.85 ) { body.Texture = "GFX\\npcs\\body1.jpg"; } else { body.Texture = "GFX\\npcs\\body2.jpg"; }
-    body.Collider.Rotate(0, Rnd(0,360), 0);
+    float rot = Rnd(0,360);
+    body.Collider.Rotate(0, rot, 0);
+    body.Collider.Position(body.Collider.GetX(true) + Sin(rot)/2.f, body.Collider.GetY(true), body.Collider.GetZ(true) + Cos(rot)/2.f);
     Texture@ tex = LoadTexture(body.Texture);
     Mesh@ mesh = cast<Mesh@>(cast<Model@>(body.Object));
     mesh.SetTexture(tex);
