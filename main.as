@@ -255,7 +255,7 @@ bool Hook_UpdateEvent(Event@ e) {
                 Player::Collider.Rotate(0, 0, 0, true);
                 Player::Collider.Reset();
 
-                Player::DeathTimer = 120;
+                // Player::DeathTimer = 120; dunno what is going on here!
                 Player::DeathMessage = deathMsg_015;
                 playerInside015 = true;
                 Lost015();
@@ -277,7 +277,7 @@ bool Hook_UpdateEvent(Event@ e) {
             }
         }
 
-        if (playerIsInRoom && (Player::Collider.GetX(true) < -1 || playerInside015)) {
+        if (playerIsInRoom && (Player::Collider.GetY(true) < -1 || playerInside015)) {
             // play music
             Music::ShouldPlay = music015;
         }
