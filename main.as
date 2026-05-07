@@ -57,13 +57,13 @@ bool Hook_Initialize() {
     RegisterRandomItem("key4", 6, 6, 6);
     RegisterRandomItem("key5", 2, 2, 2);
     RegisterRandomItem("bat", 20, 20, 20);
-    RegisterRandomItem("doc008", 1, 1, 1);
+    RegisterRandomItem("doc008", 0, 1, 1);
     RegisterRandomItem("doc012", 1, 1, 1);
     RegisterRandomItem("doc015", 1, 1, 1);
     RegisterRandomItem("doc018", 1, 1, 1);
     RegisterRandomItem("doc035", 1, 1, 1);
     RegisterRandomItem("doc049", 1, 1, 1);
-    RegisterRandomItem("doc079", 1, 1, 1);
+    RegisterRandomItem("doc079", 0, 1, 1);
     RegisterRandomItem("doc096", 1, 1, 1);
     RegisterRandomItem("doc106", 1, 1, 1);
     RegisterRandomItem("doc173", 1, 1, 1);
@@ -71,7 +71,7 @@ bool Hook_Initialize() {
     RegisterRandomItem("doc427", 1, 1, 1);
     RegisterRandomItem("doc500", 1, 1, 1);
     RegisterRandomItem("doc513", 1, 1, 1);
-    RegisterRandomItem("doc682", 1, 1, 1);
+    RegisterRandomItem("doc682", 0, 1, 1);
     RegisterRandomItem("doc714", 1, 1, 1);
     RegisterRandomItem("doc860", 1, 1, 1);
     RegisterRandomItem("doc895", 1, 1, 1);
@@ -79,7 +79,6 @@ bool Hook_Initialize() {
     RegisterRandomItem("doc966", 1, 1, 1);
     RegisterRandomItem("doc970", 1, 1, 1);
     RegisterRandomItem("doc1048", 1, 1, 1);
-    RegisterRandomItem("doc1123", 1, 1, 1);
     RegisterRandomItem("doc1162", 1, 1, 1);
     RegisterRandomItem("doc1499", 1, 1, 1);
     RegisterRandomItem("doc8601", 1, 1, 1);
@@ -126,7 +125,6 @@ bool Hook_Initialize() {
     RegisterArchiveItem("doc966", 1, 5, 5);
     RegisterArchiveItem("doc970", 5, 5, 5);
     RegisterArchiveItem("doc1048", 1, 5, 5);
-    RegisterArchiveItem("doc1123", 1, 5, 5);
     RegisterArchiveItem("doc1162", 1, 5, 5);
     RegisterArchiveItem("doc1499", 1, 5, 5);
     RegisterArchiveItem("doc8601", 1, 5, 5);

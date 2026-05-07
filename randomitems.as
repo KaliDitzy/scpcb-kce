@@ -15,6 +15,44 @@ void RegisterRandomItem(string name, int weightLCZ, int weightHCZ, int weightEZ)
     itemWeightsEZ.InsertLast(weightEZ);
 }
 
+string RandomStringPickWeightedZones(const array<string>& strings, const array<int>& weightsLCZ, const array<int>& weightsHCZ, const array<int>& weightsEZ, int zone) {
+    if(zone == 2) {
+        int totalWeight = 0;
+        foreach(int v : weightsHCZ) { totalWeight += v; }
+
+        int picker = Rnd(totalWeight); int ticker = 0; int i = 0;
+        foreach(int v : weightsHCZ) {
+            ticker += v;
+            if (ticker > picker) { return strings[i]; }
+            i++;
+        }
+    }
+    else if(zone == 3) {
+        int totalWeight = 0;
+        foreach(int v : weightsEZ) { totalWeight += v; }
+
+        int picker = Rnd(totalWeight); int ticker = 0; int i = 0;
+        foreach(int v : weightsEZ) {
+            ticker += v;
+            if (ticker > picker) { return strings[i]; }
+            i++;
+        }
+    }
+    else {
+        int totalWeight = 0;
+        foreach(int v : weightsLCZ) { totalWeight += v; }
+
+        int picker = Rnd(totalWeight); int ticker = 0; int i = 0;
+        foreach(int v : weightsLCZ) {
+            ticker += v;
+            if (ticker > picker) { return strings[i]; }
+            i++;
+        }
+    }
+
+    return "";
+}
+
 void FillRoom_RandomItems(Room@ r) {
     if (Rnd(0,1) < 0.75f) { return; }
     
@@ -37,20 +75,7 @@ void FillRoom_RandomItems(Room@ r) {
     mesh.SetTexture(tex);
     tex.Free();
 
-    string result = "origami";
-    switch(r.Zone) {
-        case 1:
-            result = RandomStringPickWeighted(itemNames, itemWeightsLCZ);
-            break;
-        case 2:
-            result = RandomStringPickWeighted(itemNames, itemWeightsHCZ);
-            break;
-        case 3:
-            result = RandomStringPickWeighted(itemNames, itemWeightsEZ);
-            break;
-        default:
-            result = RandomStringPickWeighted(itemNames, itemWeightsLCZ);
-    }
+    string result = RandomStringPickWeightedZones(itemNames, itemWeightsLCZ, itemWeightsHCZ, itemWeightsEZ, r.Zone);
     float x = Rnd(64, 128);
     float z = Rnd(64, 128);
     Item@ it = Item(result, targetX + x / 256.f, targetY, targetZ + z / 256.f);
