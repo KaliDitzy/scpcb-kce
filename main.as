@@ -51,38 +51,38 @@ void SpawnItemsLow(Room@ r, float x, float y, float z, int maxItems, float spaci
 bool Hook_Initialize() {
     music015 = Music::RegisterCustom("SFX\\Music\\079.ogg");
 
-    RegisterRandomItem("key1", 20);
-    RegisterRandomItem("key2", 16);
-    RegisterRandomItem("key3", 12);
-    RegisterRandomItem("key4", 8);
-    RegisterRandomItem("key5", 4);
-    RegisterRandomItem("bat", 20);
-    RegisterRandomItem("doc008", 1);
-    RegisterRandomItem("doc012", 1);
-    RegisterRandomItem("doc015", 1);
-    RegisterRandomItem("doc018", 1);
-    RegisterRandomItem("doc035", 1);
-    RegisterRandomItem("doc049", 1);
-    RegisterRandomItem("doc079", 1);
-    RegisterRandomItem("doc096", 1);
-    RegisterRandomItem("doc106", 1);
-    RegisterRandomItem("doc173", 1);
-    RegisterRandomItem("doc372", 1);
-    RegisterRandomItem("doc427", 1);
-    RegisterRandomItem("doc500", 1);
-    RegisterRandomItem("doc513", 1);
-    RegisterRandomItem("doc682", 1);
-    RegisterRandomItem("doc714", 1);
-    RegisterRandomItem("doc860", 1);
-    RegisterRandomItem("doc895", 1);
-    RegisterRandomItem("doc939", 1);
-    RegisterRandomItem("doc966", 1);
-    RegisterRandomItem("doc970", 1);
-    RegisterRandomItem("doc1048", 1);
-    RegisterRandomItem("doc1123", 1);
-    RegisterRandomItem("doc1162", 1);
-    RegisterRandomItem("doc1499", 1);
-    RegisterRandomItem("doc8601", 1);
+    RegisterRandomItem("key1", 20, 5, 20);
+    RegisterRandomItem("key2", 16, 8, 16);
+    RegisterRandomItem("key3", 12, 12, 12);
+    RegisterRandomItem("key4", 6, 6, 6);
+    RegisterRandomItem("key5", 2, 2, 2);
+    RegisterRandomItem("bat", 20, 20, 20);
+    RegisterRandomItem("doc008", 1, 1, 1);
+    RegisterRandomItem("doc012", 1, 1, 1);
+    RegisterRandomItem("doc015", 1, 1, 1);
+    RegisterRandomItem("doc018", 1, 1, 1);
+    RegisterRandomItem("doc035", 1, 1, 1);
+    RegisterRandomItem("doc049", 1, 1, 1);
+    RegisterRandomItem("doc079", 1, 1, 1);
+    RegisterRandomItem("doc096", 1, 1, 1);
+    RegisterRandomItem("doc106", 1, 1, 1);
+    RegisterRandomItem("doc173", 1, 1, 1);
+    RegisterRandomItem("doc372", 1, 1, 1);
+    RegisterRandomItem("doc427", 1, 1, 1);
+    RegisterRandomItem("doc500", 1, 1, 1);
+    RegisterRandomItem("doc513", 1, 1, 1);
+    RegisterRandomItem("doc682", 1, 1, 1);
+    RegisterRandomItem("doc714", 1, 1, 1);
+    RegisterRandomItem("doc860", 1, 1, 1);
+    RegisterRandomItem("doc895", 1, 1, 1);
+    RegisterRandomItem("doc939", 1, 1, 1);
+    RegisterRandomItem("doc966", 1, 1, 1);
+    RegisterRandomItem("doc970", 1, 1, 1);
+    RegisterRandomItem("doc1048", 1, 1, 1);
+    RegisterRandomItem("doc1123", 1, 1, 1);
+    RegisterRandomItem("doc1162", 1, 1, 1);
+    RegisterRandomItem("doc1499", 1, 1, 1);
+    RegisterRandomItem("doc8601", 1, 1, 1);
 
     Register015Room("kce_015_hall", RoomShape015::TWO_WAY, 100);
     Register015Room("kce_015_fork_left", RoomShape015::FORK_LEFT, 100);
@@ -154,10 +154,13 @@ bool Hook_LoadRoomTemplateEntity(CB::RoomTemplate@ rt, int version, B3D::Stream@
         string file2 = f.ReadString();
         string file3 = f.ReadString();
 
-        Vector3 minPos = Vector3::From(f.ReadString());
-        Vector3 maxPos = Vector3::From(f.ReadString());
+        Vector3 minPos;
+        minPos.From(f.ReadString());
+        Vector3 maxPos;
+        maxPos.From(f.ReadString());
 
-        Vector3 maxRot = Vector3::From(f.ReadString());
+        Vector3 maxRot;
+        maxRot.From(f.ReadString());
         
         float minScale = f.ReadFloat();
         float maxScale = f.ReadFloat();

@@ -6,17 +6,24 @@ class Vector3 {
     float Y;
     float Z;
 
+    Vector3() {
+        this.X = 0;
+        this.Y = 0;
+        this.Z = 0;
+    }
     Vector3(float x, float y, float z) {
         this.X = x;
         this.Y = y;
         this.Z = z;
     }
 
-    Vector3 From(string string) {
+    void From(string string) {
         int s1 = string.Find(" ");
         int s2 = string.Find(" ", s1 + 1);
 
-        return Vector3(string.Substring(0, s1).ParseFloat(), string.Substring(s1 + 1, s2 - s1 - 1).ParseFloat(), string.Substring(s2 + 1).ParseFloat());
+        this.X = string.Substring(0, s1).ParseFloat();
+        this.Y = string.Substring(s1 + 1, s2 - s1 - 1).ParseFloat();
+        this.Z = string.Substring(s2 + 1).ParseFloat();
     }
 }
 

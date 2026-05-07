@@ -4,11 +4,15 @@ using namespace CB;
 #include "library.as"
 
 array<string> itemNames;
-array<int> itemWeights;
+array<int> itemWeightsLCZ;
+array<int> itemWeightsHCZ;
+array<int> itemWeightsEZ;
 
-void RegisterRandomItem(string name, int weight) {
+void RegisterRandomItem(string name, int weightLCZ, int weightHCZ, int weightEZ) {
     itemNames.InsertLast(name);
-    itemWeights.InsertLast(weight);
+    itemWeightsLCZ.InsertLast(weightLCZ);
+    itemWeightsHCZ.InsertLast(weightHCZ);
+    itemWeightsEZ.InsertLast(weightEZ);
 }
 
 void FillRoom_RandomItems(Room@ r) {
@@ -33,7 +37,20 @@ void FillRoom_RandomItems(Room@ r) {
     mesh.SetTexture(tex);
     tex.Free();
 
-    string result = RandomStringPickWeighted(itemNames, itemWeights);
+    string result = "origami";
+    switch(r.Zone) {
+        case 1:
+            result = RandomStringPickWeighted(itemNames, itemWeightsLCZ);
+            break;
+        case 2:
+            result = RandomStringPickWeighted(itemNames, itemWeightsHCZ);
+            break;
+        case 3:
+            result = RandomStringPickWeighted(itemNames, itemWeightsEZ);
+            break;
+        default:
+            result = RandomStringPickWeighted(itemNames, itemWeightsLCZ);
+    }
     float x = Rnd(64, 128);
     float z = Rnd(64, 128);
     Item@ it = Item(result, targetX + x / 256.f, targetY, targetZ + z / 256.f);
