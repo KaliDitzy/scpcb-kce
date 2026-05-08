@@ -6,6 +6,9 @@ using namespace CB;
 #include "randomitems.as"
 #include "015.as"
 
+NPC@ scp131a;
+NPC@ scp131b;
+
 Music music015;
 Music music015inside;
 
@@ -246,10 +249,9 @@ bool Hook_FillRoom(Room@ r) {
 bool Hook_PostFillRoom(Room@ r) {
     FillRoom_RandomItems(r);
 
-    /*
     if (r.Template.Name == "kce_015cc") {
-        NPC@ scp131a = NPC(NPC::Type::ClassD, -131, -131, -131);
-        NPC@ scp131b = NPC(NPC::Type::ClassD, -131, -131, -131);
+        @scp131a = NPC(NPC::Type::ClassD, -131, -131, -131);
+        @scp131b = NPC(NPC::Type::ClassD, -131, -131, -131);
 
         scp131a.ID = 13101;
         scp131a.Collider.SetRadius(0.125, 0.125);
@@ -259,7 +261,6 @@ bool Hook_PostFillRoom(Room@ r) {
         scp131b.Collider.SetRadius(0.125, 0.125);
         scp131b.Idle = 30;
     }
-    */
 
     for (int i = 0; i < tempJunk.Length; i++) {
         tempJunk[i].Spawn(@r);
@@ -319,7 +320,7 @@ bool Hook_UpdateEvent(Event@ e) {
     return false;
 }
 
-/*
+
 bool Hook_UpdateNPC(NPC@ n) {
     if (n.ID >= 13101 && n.ID <= 13102) {
         // n.State
@@ -365,4 +366,3 @@ bool Hook_UpdateNPC(NPC@ n) {
     }
     return false;
 }
-*/
