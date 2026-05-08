@@ -171,7 +171,7 @@ bool Hook_LoadRoomTemplateEntity(CB::RoomTemplate@ rt, int version, B3D::Stream@
         int minObj = f.ReadInt();
         int maxObj = f.ReadInt();
 
-        RegisterTempJunk(TempJunk(x, y, z, file1, file2, file3, minPos, maxPos, maxRot, minScale, maxScale, minObj, maxObj));
+        RegisterTempJunk(TempJunk(rt, x, y, z, file1, file2, file3, minPos, maxPos, maxRot, minScale, maxScale, minObj, maxObj));
 
         return true;
     }
@@ -263,7 +263,7 @@ bool Hook_PostFillRoom(Room@ r) {
     }*/
 
     for (int i = 0; i < tempJunk.Length; i++) {
-        tempJunk[i].Spawn(@r);
+        if (tempJunk[i].rt.Name == r.Template.Name) { tempJunk[i].Spawn(@r); }
     }
 
     return false;
@@ -325,14 +325,14 @@ bool Hook_UpdateNPC(NPC@ n) {
     if (n.ID >= 13101 && n.ID <= 13102) {
         // n.State
 
-        float playerDistance = Distance(
+        float playerDistance = Sqr(DistanceSquared(
             n.Collider.GetX(true),
             n.Collider.GetY(true),
             n.Collider.GetZ(true),
             Player::Collider.GetX(true),
             Player::Collider.GetY(true),
             Player::Collider.GetZ(true)
-        );
+        ));
 
         if (playerDistance > 6.f) { n.Idle += FPSFactor; } else { n.Idle = 0; }
         
