@@ -7,6 +7,7 @@ using namespace CB;
 #include "015.as"
 
 Music music015;
+Music music015inside;
 
 array<string> archiveItemNames;
 array<int> archiveItemWeights2;
@@ -49,7 +50,8 @@ void SpawnItemsLow(Room@ r, float x, float y, float z, int maxItems, float spaci
 }
 
 bool Hook_Initialize() {
-    music015 = Music::RegisterCustom("SFX\\Music\\079.ogg");
+    music015 = Music::RegisterCustom("SFX\\Music\\015.ogg");
+    music015inside = Music::RegisterCustom("SFX\\Music\\015Inside.ogg");
 
     RegisterRandomItem("key1", 20, 5, 20);
     RegisterRandomItem("key2", 16, 8, 16);
@@ -284,7 +286,7 @@ bool Hook_UpdateEvent(Event@ e) {
                 Player::Collider.Rotate(0, 0, 0, true);
                 Player::Collider.Reset();
 
-                Player::DeathTimer = 120 * FPSFactor;
+                Player::DeathTimer = 120.f * 70.f;
                 Player::DeathMessage = deathMsg_015;
                 playerInside015 = true;
                 Lost015();
@@ -306,8 +308,10 @@ bool Hook_UpdateEvent(Event@ e) {
             }
         }
 
-        if (playerIsInRoom && (Player::Collider.GetY(true) < -1 || playerInside015)) {
-            // play music
+        if (playerInside015) {
+            Music::ShouldPlay = music015inside;
+        }
+        else if (playerIsInRoom && (Player::Collider.GetY(true) < -1)) {
             Music::ShouldPlay = music015;
         }
     }
