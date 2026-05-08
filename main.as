@@ -249,7 +249,7 @@ bool Hook_FillRoom(Room@ r) {
 bool Hook_PostFillRoom(Room@ r) {
     FillRoom_RandomItems(r);
 
-    if (r.Template.Name == "kce_015cc") {
+    /*if (r.Template.Name == "kce_015cc") {
         @scp131a = NPC(NPC::Type::ClassD, -131, -131, -131);
         @scp131b = NPC(NPC::Type::ClassD, -131, -131, -131);
 
@@ -260,7 +260,7 @@ bool Hook_PostFillRoom(Room@ r) {
         scp131b.ID = 13102;
         scp131b.Collider.SetRadius(0.125, 0.125);
         scp131b.Idle = 30;
-    }
+    }*/
 
     for (int i = 0; i < tempJunk.Length; i++) {
         tempJunk[i].Spawn(@r);
