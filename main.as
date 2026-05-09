@@ -6,8 +6,8 @@ using namespace CB;
 #include "randomitems.as"
 #include "015.as"
 
-NPC@ scp131a;
-NPC@ scp131b;
+NPC@ scp131a; bool scp131a_spawned;
+NPC@ scp131b; bool scp131b_spawned;
 
 Music music015;
 Music music015inside;
@@ -249,19 +249,6 @@ bool Hook_FillRoom(Room@ r) {
 bool Hook_PostFillRoom(Room@ r) {
     FillRoom_RandomItems(r);
 
-    /*if (r.Template.Name == "kce_015cc") {
-        @scp131a = NPC(NPC::Type::ClassD, -131, -131, -131);
-        @scp131b = NPC(NPC::Type::ClassD, -131, -131, -131);
-
-        scp131a.ID = 13101;
-        scp131a.Collider.SetRadius(0.125, 0.125);
-        scp131a.Idle = 30;
-
-        scp131b.ID = 13102;
-        scp131b.Collider.SetRadius(0.125, 0.125);
-        scp131b.Idle = 30;
-    }*/
-
     for (int i = 0; i < tempJunk.Length; i++) {
         if (tempJunk[i].rt.Name == r.Template.Name) { tempJunk[i].Spawn(@r); }
     }
@@ -269,6 +256,27 @@ bool Hook_PostFillRoom(Room@ r) {
     return false;
 }
 
+bool Hook_Update() {
+    if (!scp131a_spawned) {
+        @scp131a = NPC(NPC::Type::ClassD, 0, 0, 0);
+        scp131a.ID = 13101;
+        scp131a.NVName = "SCP-131-A";
+        scp131a.Collider.SetRadius(0.125, 0.125);
+        scp131a.Idle = 30;
+
+        scp131a_spawned = true;
+    }
+
+    if (!scp131b_spawned) {
+        @scp131b = NPC(NPC::Type::ClassD, 0, 0, 0);
+        scp131b.ID = 131012;
+        scp131b.NVName = "SCP-131-B";
+        scp131b.Collider.SetRadius(0.125, 0.125);
+        scp131b.Idle = 30;
+        
+        scp131b_spawned = true;
+    }
+}
 bool Hook_UpdateEvent(Event@ e) {
     bool playerIsInRoom = (@e.Room == @Player::CurrentRoom);
     if (e.Name == "room1archive") {
@@ -323,7 +331,7 @@ bool Hook_UpdateEvent(Event@ e) {
 
 bool Hook_UpdateNPC(NPC@ n) {
     if (n.ID >= 13101 && n.ID <= 13102) {
-        // n.State
+        // n.State == 
 
         float playerDistance = Sqr(DistanceSquared(
             n.Collider.GetX(true),
@@ -334,31 +342,38 @@ bool Hook_UpdateNPC(NPC@ n) {
             Player::Collider.GetZ(true)
         ));
 
-        if (playerDistance > 6.f) { n.Idle += FPSFactor; } else { n.Idle = 0; }
+        if (playerDistance > 6.f) { n.Idle += FPSFactor / 70.f; } else { n.Idle = 0; }
         
         if (n.Idle >= 30.f) {
             // Out of bounds, waiting to be placed.
+            Console::CreateMessage("SCP-131 is inactive.");
+
             n.DropSpeed = 0;
             n.Collider.Position(-131, -131, -131);
             n.Collider.Reset();
 
-            if (Rand(0, 1000) == 0) {
-                n.Idle = -1; // Place SCP-131.
+            if (Rand(0, 2) == 0) {
+                n.Idle = -10; // Place SCP-131.
             }
         }
         else if (n.Idle < 0) {
             // Places SCP-131.
-            float targetX = Player::CurrentRoom.X + (Rand(0,1) * 4) - 2;
-            float targetZ = Player::CurrentRoom.Z + (Rand(0,1) * 4) - 2;
-            n.Collider.Position(targetX, Player::CurrentRoom.Y + 0.35f, targetZ);
-            n.Collider.Reset();
+            Console::CreateMessage("SCP-131 is being placed.");
 
-            n.DropSpeed = -0.1f;
+            //float targetX = Player::CurrentRoom.X + (Rand(0,1) * 8) - 4;
+            //float targetZ = Player::CurrentRoom.Z + (Rand(0,1) * 8) - 4;
+            float targetX = Player::CurrentRoom.X; float targetZ = Player::CurrentRoom.Z;
+            n.Collider.Position(targetX, Player::CurrentRoom.Y + 0.35f, targetZ, true);
+            n.Collider.Reset();
 
             n.Idle = 0;
         }
         else {
             // SCP-131 behavior.
+            Console::CreateMessage("SCP-131 is active.");
+
+            n.DropSpeed = -0.1f;
+
             n.Collider.PointAt(Player::Collider);
         }
 
