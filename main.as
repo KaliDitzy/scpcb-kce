@@ -256,23 +256,35 @@ bool Hook_PostFillRoom(Room@ r) {
     return false;
 }
 
-bool Hook_Update() {
-    if (!scp131a_spawned) {
+void Hook_Update() {
+    if (!scp131a_spawned && !Menu::IsMainMenuOpen) {
         @scp131a = NPC(NPC::Type::ClassD, 0, 0, 0);
         scp131a.ID = 13101;
         scp131a.NVName = "SCP-131-A";
         scp131a.Collider.SetRadius(0.125, 0.125);
         scp131a.Idle = 30;
 
+        scp131a.Texture = "GFX\\npcs\\body1.jpg";
+        Texture@ tex = LoadTexture(scp131a.Texture);
+        Mesh@ mesh = cast<Mesh@>(cast<Model@>(scp131a.Object));
+        mesh.SetTexture(tex);
+        tex.Free();
+
         scp131a_spawned = true;
     }
 
-    if (!scp131b_spawned) {
+    if (!scp131b_spawned && !Menu::IsMainMenuOpen) {
         @scp131b = NPC(NPC::Type::ClassD, 0, 0, 0);
         scp131b.ID = 131012;
         scp131b.NVName = "SCP-131-B";
         scp131b.Collider.SetRadius(0.125, 0.125);
         scp131b.Idle = 30;
+
+        scp131b.Texture = "GFX\\npcs\\body1.jpg";
+        Texture@ tex = LoadTexture(scp131b.Texture);
+        Mesh@ mesh = cast<Mesh@>(cast<Model@>(scp131b.Object));
+        mesh.SetTexture(tex);
+        tex.Free();
         
         scp131b_spawned = true;
     }
@@ -330,7 +342,7 @@ bool Hook_UpdateEvent(Event@ e) {
 
 
 bool Hook_UpdateNPC(NPC@ n) {
-    if (n.ID >= 13101 && n.ID <= 13102) {
+    if (n.ID == scp131a.ID || n.ID == scp131b.ID) {
         // n.State == 
 
         float playerDistance = Sqr(DistanceSquared(
@@ -346,19 +358,19 @@ bool Hook_UpdateNPC(NPC@ n) {
         
         if (n.Idle >= 30.f) {
             // Out of bounds, waiting to be placed.
-            Console::CreateMessage("SCP-131 is inactive.");
+            Console::CreateMessage(n.NVName + " is inactive.", 255, 0, 0);
 
             n.DropSpeed = 0;
             n.Collider.Position(-131, -131, -131);
             n.Collider.Reset();
 
-            if (Rand(0, 2) == 0) {
+            if (Rand(0, 200) == 0) {
                 n.Idle = -10; // Place SCP-131.
             }
         }
         else if (n.Idle < 0) {
             // Places SCP-131.
-            Console::CreateMessage("SCP-131 is being placed.");
+            Console::CreateMessage(n.NVName + " is being placed.", 255, 255, 0);
 
             //float targetX = Player::CurrentRoom.X + (Rand(0,1) * 8) - 4;
             //float targetZ = Player::CurrentRoom.Z + (Rand(0,1) * 8) - 4;
@@ -370,7 +382,7 @@ bool Hook_UpdateNPC(NPC@ n) {
         }
         else {
             // SCP-131 behavior.
-            Console::CreateMessage("SCP-131 is active.");
+            Console::CreateMessage(n.NVName + " is active.", 0, 255, 0);
 
             n.DropSpeed = -0.1f;
 
