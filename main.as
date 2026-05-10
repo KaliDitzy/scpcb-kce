@@ -342,51 +342,90 @@ bool Hook_UpdateEvent(Event@ e) {
     return false;
 }
 
-
 bool Hook_UpdateNPC(NPC@ n) {
     if (n.ID == scp131a.ID || n.ID == scp131b.ID) {
-        float playerDistance = Sqr(DistanceSquared(
+        // n.State == Target Speed
+        // n.Idle == Movement Direction
+        // n.State2 == Target Angle
+
+        float adjustedFPSFactor = FPSFactor / 70.f;
+
+        float playerDistance = DistanceSquared(
             n.Collider.GetX(true),
             n.Collider.GetY(true),
             n.Collider.GetZ(true),
             Player::Collider.GetX(true),
             Player::Collider.GetY(true),
             Player::Collider.GetZ(true)
-        ));
+        );
 
-        if (playerDistance > 6.f) { n.Idle += FPSFactor / 70.f; } else { n.Idle = 0; }
+        float distance173 = DistanceSquared(
+            n.Collider.GetX(true),
+            n.Collider.GetY(true),
+            n.Collider.GetZ(true),
+            NPC::Current173.Collider.GetX(true),
+            NPC::Current173.Collider.GetY(true),
+            NPC::Current173.Collider.GetZ(true)
+        );
+
+        float currentAngle = n.Collider.GetYaw(true);
+        float speed = .25f;
+
+        if (playerDistance > 6.f) { n.IdleTimer += adjustedFPSFactor; } else { n.IdleTimer = 0; }
+        if (playerDistance < 1.f && Rand(0,25) == 0) { n.State = -speed * 25.f; n.Idle = 0; }
+
+        if (distance173 < 3.f) {
+            n.Collider.PointAt(NPC::Current173.Collider);
+            n.State2 = n.Collider.GetYaw(true);
+            n.Collider.Rotate(0, currentAngle, 0, true);
+        }
+        else {
+            n.Collider.PointAt(Player::Collider);
+            n.State2 = n.Collider.GetYaw(true);
+            n.Collider.Rotate(0, currentAngle, 0, true);
+        }
         
-        if (n.Idle >= 30.f) {
+        if (n.IdleTimer >= 30.f) {
             // Out of bounds, waiting to be placed.
-            Console::CreateMessage(n.NVName + " is inactive.", 255, 0, 0);
 
             n.DropSpeed = 0;
             n.Collider.Position(-131, -131, -131);
             n.Collider.Reset();
 
             if (Rand(0, 200) == 0) {
-                n.Idle = -10; // Place SCP-131.
+                n.IdleTimer = -10; // Place SCP-131.
             }
         }
-        else if (n.Idle < 0) {
+        else if (n.IdleTimer < 0) {
             // Places SCP-131.
             Console::CreateMessage(n.NVName + " is being placed.", 255, 255, 0);
 
             //float targetX = Player::CurrentRoom.X + (Rand(0,1) * 8) - 4;
             //float targetZ = Player::CurrentRoom.Z + (Rand(0,1) * 8) - 4;
             float targetX = Player::CurrentRoom.X; float targetZ = Player::CurrentRoom.Z;
-            n.Collider.Position(targetX, Player::CurrentRoom.Y + 0.35f, targetZ, true);
+            n.Collider.Position(targetX + Rnd(-0.5f,0.5f), Player::CurrentRoom.Y + 0.35f, targetZ + Rnd(-0.5f,0.5f), true);
             n.Collider.Reset();
 
-            n.Idle = 0;
+            n.IdleTimer = 0;
         }
         else {
             // SCP-131 behavior.
-            Console::CreateMessage(n.NVName + " is active.", 0, 255, 0);
 
             n.DropSpeed = -0.1f;
 
-            n.Collider.PointAt(Player::Collider);
+            if (currentAngle < n.State2) { n.Collider.Turn(0, -adjustedFPSFactor * 45, 0, true); }
+            else if (currentAngle > n.State2) { n.Collider.Turn(0, adjustedFPSFactor * 45, 0, true); }
+
+            if (n.Idle == 0) { currentAngle += 90.f; }
+
+            // Randomly move left or right.
+            if (Rand(0, 500) == 0) { n.State = speed * (Rand(0,1) * 2 - 1); n.Idle = 1; }
+            n.Collider.Translate(adjustedFPSFactor * n.CurrentSpeed * Cos(currentAngle), 0, adjustedFPSFactor * n.CurrentSpeed * Sin(currentAngle), false);
+        }
+
+        if (Rand(0,200) == 0) { n.State = 0; }
+        if (n.CurrentSpeed != n.State) {
+            n.CurrentSpeed = ((n.CurrentSpeed * 19.f) + n.State) / 20.f;
         }
 
         n.Object.Position(n.Collider.GetX(true), n.Collider.GetY(true) - 0.32, n.Collider.GetZ(true), true);
