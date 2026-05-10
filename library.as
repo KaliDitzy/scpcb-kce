@@ -96,3 +96,74 @@ int RandomBiasedHigh(int min, int max)
     int b = Rand(min, max);
     return a > b ? a : b;
 }
+
+string DigitToString(int d) {
+    if (d == 0) return "0";
+    if (d == 1) return "1";
+    if (d == 2) return "2";
+    if (d == 3) return "3";
+    if (d == 4) return "4";
+    if (d == 5) return "5";
+    if (d == 6) return "6";
+    if (d == 7) return "7";
+    if (d == 8) return "8";
+    if (d == 9) return "9";
+    return "";
+}
+
+// Didn't you know that cigarettes contain benzopyrene, a chemical that leads to lung cancer? 
+// We now know that when benzopyrene enters the body, it changes to benzopyrene diolepoxide and attaches to the receptors on the P53 gene, the gene which causes lung cancer. 
+// The BPDE attaches to the P53 gene in three specific locations and causes pre-cancerous changes to the lung tissue.
+string IntToString(int n) {
+    if (n == 0) return "0";
+    string result = "";
+    int negative = 0;
+    if (n < 0) {
+        negative = 1;
+        n = -n;
+    }
+    while (n > 0) {
+        int digit = n % 10;
+        result = DigitToString(digit) + result;
+        n = n / 10;
+    }
+    if (negative != 0) result = "-" + result;
+    return result;
+}
+
+// do you think love can bloom even on a battlefield
+string FloatToString(float f, int decimals) {
+    int neg = 0;
+    if (f < 0) {
+        neg = 1;
+        f = -f;
+    }
+
+    int intPart = int(f);
+    float frac = f - intPart;
+
+    string fracStr = "";
+    int count = 0;
+    while (count < decimals) {
+        frac = frac * 10.0;
+        int digit = int(frac);
+        fracStr = fracStr + DigitToString(digit);
+        frac = frac - digit;
+        count = count + 1;
+    }
+
+    string result = IntToString(intPart);
+    if (decimals > 0) result = result + "." + fracStr;
+    if (neg != 0) result = "-" + result;
+    return result;
+}
+
+float SmartDropSpeed(float dropSpeed, NPC@ n) {
+    Entity@ pick = LinePick(n.Collider.GetX(true), n.Collider.GetY(true), n.Collider.GetZ(true), 0, dropSpeed, 0);
+    if (pick != null) {
+        return 0;
+    }
+    else {
+        return dropSpeed;
+    }
+}

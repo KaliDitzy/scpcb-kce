@@ -182,7 +182,6 @@ bool Hook_LoadRoomTemplateEntity(CB::RoomTemplate@ rt, int version, B3D::Stream@
     return false;
 }
 
-
 bool Hook_FillRoom(Room@ r) {
     if(r.Template.Name == "room1archive") {
         // level 2
@@ -262,6 +261,8 @@ bool Hook_PostFillRoom(Room@ r) {
 
 void Hook_Update() {
     if (!scp131a_spawned && !Menu::IsMainMenuOpen) {
+        Console::CreateMessage("SCP-131-A is being spawned.", 255, 255, 0);
+
         @scp131a = NPC(NPC::Type::ClassD, 0, 0, 0);
         scp131a.ID = 13101;
         scp131a.NVName = "SCP-131-A";
@@ -284,6 +285,8 @@ void Hook_Update() {
     }
 
     if (!scp131b_spawned && !Menu::IsMainMenuOpen) {
+        Console::CreateMessage("SCP-131-B is being spawned.", 255, 255, 0);
+
         @scp131b = NPC(NPC::Type::ClassD, 0, 0, 0);
         scp131b.ID = 131012;
         scp131b.NVName = "SCP-131-B";
@@ -399,11 +402,10 @@ bool Hook_UpdateNPC(NPC@ n) {
         if (n.IdleTimer >= 30.f) {
             // Out of bounds, waiting to be placed.
 
-            n.DropSpeed = 0;
             n.Collider.Position(-131, -131, -131);
             n.Collider.Reset();
 
-            if (Rand(0, 200) == 0 && playerDistance173 > 6.f) {
+            if (Rand(0, 100) == 0 && playerDistance173 > 6.f) {
                 n.IdleTimer = -10; // Place SCP-131.
             }
         }
@@ -411,9 +413,16 @@ bool Hook_UpdateNPC(NPC@ n) {
             // Places SCP-131.
             Console::CreateMessage(n.NVName + " is being placed.", 255, 255, 0);
 
-            //float targetX = Player::CurrentRoom.X + (Rand(0,1) * 8) - 4;
-            //float targetZ = Player::CurrentRoom.Z + (Rand(0,1) * 8) - 4;
-            float targetX = Player::CurrentRoom.X; float targetZ = Player::CurrentRoom.Z;
+            int randomDirection = Rand(0,1);
+            float targetX = Player::CurrentRoom.X;
+            float targetZ = Player::CurrentRoom.Z;
+            if (randomDirection == 1) {
+                targetX += (Rand(0,1) * 16) - 8;
+            }
+            else {
+                targetZ += (Rand(0,1) * 16) - 8;
+            }
+
             n.Collider.Position(targetX + Rnd(-0.5f,0.5f), Player::CurrentRoom.Y + 0.35f, targetZ + Rnd(-0.5f,0.5f), true);
             n.Collider.Rotate(0, Rnd(0,360.f), 0, true);
             n.Collider.Reset();
@@ -423,7 +432,8 @@ bool Hook_UpdateNPC(NPC@ n) {
         else {
             // SCP-131 behavior.
 
-            n.DropSpeed = -0.1f;
+            n.FallingPickDistance = 1.f;
+            n.DropSpeed = SmartDropSpeed(-0.01f, n);
 
             if (distance173 < 3.f && NPC::Current173.Idle != 3) {
                 n.Angle = ATan2(NPC::Current173.Collider.GetZ(true) - n.Collider.GetZ(true), NPC::Current173.Collider.GetX(true) - n.Collider.GetX(true)) - 90.f;
@@ -454,7 +464,7 @@ bool Hook_UpdateNPC(NPC@ n) {
             // Randomly move left or right.
             if (n.Idle == 0) { currentAngle += 90.f; }
             if (Rand(0, 500) == 0) { n.Speed = speed * (Rand(0,1) * 2 - 1); n.Idle = 1; }
-            n.Collider.Translate(adjustedFPSFactor * n.CurrentSpeed * Cos(currentAngle), 0, adjustedFPSFactor * n.CurrentSpeed * Sin(currentAngle), false);
+            n.Collider.Translate(adjustedFPSFactor * n.CurrentSpeed * Cos(currentAngle), n.DropSpeed, adjustedFPSFactor * n.CurrentSpeed * Sin(currentAngle), false);
             
             if (Rand(0,200) == 0) { n.Speed = 0; }
             if (n.CurrentSpeed != n.Speed) {
@@ -462,17 +472,18 @@ bool Hook_UpdateNPC(NPC@ n) {
             }
         }
 
-        n.Object.Position(n.Collider.GetX(true), n.Collider.GetY(true) - 0.32, n.Collider.GetZ(true), true);
+        n.Object.Position(n.Collider.GetX(true), n.Collider.GetY(true) - 0.12f, n.Collider.GetZ(true), true);
         n.Object.Rotate(0, n.Collider.GetYaw(true), 0, true);
 
         return true;
     }
     else if (n.NVName == "SCP-173") {
         if (n.Idle == 4) {
-            n.DropSpeed = -0.1f;
+            n.DropSpeed = SmartDropSpeed(-0.01f, n);
 
             n.Channel.Stop();
 
+            n.Collider.Translate(0, n.DropSpeed, 0, true);
             n.Object.Position(n.Collider.GetX(true), n.Collider.GetY(true) - 0.32, n.Collider.GetZ(true), true);
             n.Object.Rotate(0, n.Collider.GetYaw(true)-180, 0, true);
 
