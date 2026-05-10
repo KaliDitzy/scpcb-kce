@@ -428,7 +428,7 @@ bool Hook_UpdateNPC(NPC@ n) {
             if (distance173 < 3.f && NPC::Current173.Idle != 3) {
                 n.Angle = ATan2(NPC::Current173.Collider.GetZ(true) - n.Collider.GetZ(true), NPC::Current173.Collider.GetX(true) - n.Collider.GetX(true)) - 90.f;
 
-                NPC::Current173.Idle = 1;
+                NPC::Current173.Idle = 4;
             }
             else if (playerDistance < 4.f) {
                 n.Angle = ATan2(Player::Collider.GetZ(true) - n.Collider.GetZ(true), Player::Collider.GetX(true) - n.Collider.GetX(true)) - 90.f;
@@ -466,6 +466,20 @@ bool Hook_UpdateNPC(NPC@ n) {
         n.Object.Rotate(0, n.Collider.GetYaw(true), 0, true);
 
         return true;
+    }
+    else if (n.NVName == "SCP-173") {
+        if (n.Idle == 4) {
+            n.DropSpeed = -0.1f;
+
+            n.Channel.Stop();
+
+            n.Object.Position(n.Collider.GetX(true), n.Collider.GetY(true) - 0.32, n.Collider.GetZ(true), true);
+            n.Object.Rotate(0, n.Collider.GetYaw(true)-180, 0, true);
+
+            n.Idle = 0;
+
+            return true;
+        }
     }
     return false;
 }
