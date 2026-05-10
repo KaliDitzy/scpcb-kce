@@ -24309,7 +24309,7 @@ entity
 }
 entity
 {
-    "id" "292"
+    "id" "-1"
     "classname" "door"
     "type" "0"
     "keycard" "0"
@@ -24336,7 +24336,7 @@ entity
 }
 entity
 {
-    "id" "293"
+    "id" "-1"
     "classname" "door"
     "type" "0"
     "keycard" "2"
@@ -24363,7 +24363,7 @@ entity
 }
 entity
 {
-    "id" "294"
+    "id" "-1"
     "classname" "door"
     "type" "0"
     "keycard" "3"
@@ -24390,7 +24390,7 @@ entity
 }
 entity
 {
-    "id" "295"
+    "id" "-1"
     "classname" "door"
     "type" "0"
     "keycard" "4"
@@ -24420,8 +24420,8 @@ cameras
     "activecamera" "0"
     camera
     {
-        "position" "[553.18850000 -248.49640000 268.91110000]"
-        "look" "[560.38960000 -176.54930000 205.76180000]"
+        "position" "[-566.53690000 -819.53160000 285.78070000]"
+        "look" "[-574.76920000 -741.67910000 230.21700000]"
     }
 }
 cordon
