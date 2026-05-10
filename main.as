@@ -59,11 +59,13 @@ bool Hook_Initialize() {
     music015inside = Music::RegisterCustom("SFX\\Music\\015Inside.ogg");
 
     RegisterRandomItem("key1", 20, 5, 20);
-    RegisterRandomItem("key2", 16, 8, 16);
-    RegisterRandomItem("key3", 12, 12, 12);
-    RegisterRandomItem("key4", 6, 6, 6);
-    RegisterRandomItem("key5", 2, 2, 2);
+    RegisterRandomItem("key2", 12, 8, 16);
+    RegisterRandomItem("key3", 6, 12, 12);
+    RegisterRandomItem("key4", 0, 2, 6);
+    RegisterRandomItem("key5", 0, 0, 2);
     RegisterRandomItem("bat", 20, 20, 20);
+    RegisterArchiveItem("radio", 0, 1, 2);
+    RegisterArchiveItem("gasmask", 1, 2, 0);
     RegisterRandomItem("doc008", 0, 1, 1);
     RegisterRandomItem("doc012", 1, 1, 1);
     RegisterRandomItem("doc015", 1, 1, 1);
@@ -421,6 +423,8 @@ bool Hook_UpdateNPC(NPC@ n) {
         else {
             // SCP-131 behavior.
 
+            n.DropSpeed = -0.1f;
+
             if (distance173 < 3.f && NPC::Current173.Idle != 3) {
                 n.Angle = ATan2(NPC::Current173.Collider.GetZ(true) - n.Collider.GetZ(true), NPC::Current173.Collider.GetX(true) - n.Collider.GetX(true)) - 90.f;
 
@@ -437,8 +441,6 @@ bool Hook_UpdateNPC(NPC@ n) {
                     n.Angle = Rnd(0,360) - 90.f;
                 } 
             }
-
-            n.DropSpeed = -0.1f;
 
             float diff = n.Angle - currentAngle; while (diff > 180.f) diff -= 360.f; while (diff < -180.f) diff += 360.f;
             float turnSpeed = adjustedFPSFactor * 45.f;
