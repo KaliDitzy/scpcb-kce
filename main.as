@@ -262,13 +262,14 @@ void Hook_Update() {
         scp131a.ID = 13101;
         scp131a.NVName = "SCP-131-A";
         scp131a.Collider.SetRadius(0.125, 0.125);
+        scp131a.CollRadius = 0.125;
         scp131a.Idle = 30;
 
-        scp131a.Texture = "GFX\\npcs\\body1.jpg";
-        Texture@ tex = LoadTexture(scp131a.Texture);
-        Mesh@ mesh = cast<Mesh@>(cast<Model@>(scp131a.Object));
-        mesh.SetTexture(tex);
-        tex.Free();
+        //scp131a.Texture = "GFX\\npcs\\body1.jpg";
+        //Texture@ tex = LoadTexture(scp131a.Texture);
+        //Mesh@ mesh = cast<Mesh@>(cast<Model@>(scp131a.Object));
+        //mesh.SetTexture(tex);
+        //tex.Free();
 
         scp131a_spawned = true;
     }
@@ -278,13 +279,14 @@ void Hook_Update() {
         scp131b.ID = 131012;
         scp131b.NVName = "SCP-131-B";
         scp131b.Collider.SetRadius(0.125, 0.125);
+        scp131b.CollRadius = 0.125;
         scp131b.Idle = 30;
 
-        scp131b.Texture = "GFX\\npcs\\body1.jpg";
-        Texture@ tex = LoadTexture(scp131b.Texture);
-        Mesh@ mesh = cast<Mesh@>(cast<Model@>(scp131b.Object));
-        mesh.SetTexture(tex);
-        tex.Free();
+        //scp131b.Texture = "GFX\\npcs\\body1.jpg";
+        //Texture@ tex = LoadTexture(scp131b.Texture);
+        //Mesh@ mesh = cast<Mesh@>(cast<Model@>(scp131b.Object));
+        //mesh.SetTexture(tex);
+        //tex.Free();
         
         scp131b_spawned = true;
     }
@@ -343,8 +345,6 @@ bool Hook_UpdateEvent(Event@ e) {
 
 bool Hook_UpdateNPC(NPC@ n) {
     if (n.ID == scp131a.ID || n.ID == scp131b.ID) {
-        // n.State == 
-
         float playerDistance = Sqr(DistanceSquared(
             n.Collider.GetX(true),
             n.Collider.GetY(true),
@@ -388,6 +388,9 @@ bool Hook_UpdateNPC(NPC@ n) {
 
             n.Collider.PointAt(Player::Collider);
         }
+
+        n.Object.Position(n.Collider.GetX(true), n.Collider.GetY(true) - 0.32, n.Collider.GetZ(true), true);
+        n.Object.Rotate(0, n.Collider.GetYaw(true), 0, true);
 
         return true;
     }
