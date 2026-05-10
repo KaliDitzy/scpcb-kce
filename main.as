@@ -8,6 +8,7 @@ using namespace CB;
 
 NPC@ scp131a; bool scp131a_spawned;
 NPC@ scp131b; bool scp131b_spawned;
+Mesh@ scp131_mesh;
 
 Music music015;
 Music music015inside;
@@ -53,6 +54,7 @@ void SpawnItemsLow(Room@ r, float x, float y, float z, int maxItems, float spaci
 }
 
 bool Hook_Initialize() {
+    @scp131_mesh = LoadMesh("GFX\\npcs\\131.b3d", null);
     music015 = Music::RegisterCustom("SFX\\Music\\015.ogg");
     music015inside = Music::RegisterCustom("SFX\\Music\\015Inside.ogg");
 
@@ -264,12 +266,17 @@ void Hook_Update() {
         scp131a.Collider.SetRadius(0.125, 0.125);
         scp131a.CollRadius = 0.125;
         scp131a.Idle = 30;
+        scp131a.Speed = 0;
 
-        //scp131a.Texture = "GFX\\npcs\\body1.jpg";
-        //Texture@ tex = LoadTexture(scp131a.Texture);
-        //Mesh@ mesh = cast<Mesh@>(cast<Model@>(scp131a.Object));
-        //mesh.SetTexture(tex);
-        //tex.Free();
+        scp131a.Object.Free();
+        @scp131a.Object = LoadMesh("GFX\\npcs\\131.b3d", null);//scp131_mesh;
+        scp131a.Object.Scale(1 / 256.f, 1 / 256.f, 1 / 256.f, true);
+
+        scp131a.Texture = "GFX\\npcs\\131a.png";
+        Texture@ tex = LoadTexture(scp131a.Texture);
+        Mesh@ mesh = cast<Mesh@>(cast<Model@>(scp131a.Object));
+        mesh.SetTexture(tex);
+        tex.Free();
 
         scp131a_spawned = true;
     }
@@ -281,12 +288,17 @@ void Hook_Update() {
         scp131b.Collider.SetRadius(0.125, 0.125);
         scp131b.CollRadius = 0.125;
         scp131b.Idle = 30;
+        scp131b.Speed = 0;
 
-        //scp131b.Texture = "GFX\\npcs\\body1.jpg";
-        //Texture@ tex = LoadTexture(scp131b.Texture);
-        //Mesh@ mesh = cast<Mesh@>(cast<Model@>(scp131b.Object));
-        //mesh.SetTexture(tex);
-        //tex.Free();
+        scp131b.Object.Free();
+        @scp131b.Object = LoadMesh("GFX\\npcs\\131.b3d", null);//scp131_mesh;
+        scp131b.Object.Scale(1 / 256.f, 1 / 256.f, 1 / 256.f, true);
+
+        scp131b.Texture = "GFX\\npcs\\131b.png";
+        Texture@ tex = LoadTexture(scp131b.Texture);
+        Mesh@ mesh = cast<Mesh@>(cast<Model@>(scp131b.Object));
+        mesh.SetTexture(tex);
+        tex.Free();
         
         scp131b_spawned = true;
     }
@@ -345,7 +357,7 @@ bool Hook_UpdateEvent(Event@ e) {
 bool Hook_UpdateNPC(NPC@ n) {
     if (n.ID == scp131a.ID || n.ID == scp131b.ID) {
         // n.Speed == Target Speed
-        // n.Idle == Movement Direction
+        // n.Idle == Movement Direction (0 == forward, backwards; 1 == right, left)
         // n.Angle == Target Angle
 
         float adjustedFPSFactor = FPSFactor / 70.f;
@@ -368,27 +380,19 @@ bool Hook_UpdateNPC(NPC@ n) {
             NPC::Current173.Collider.GetZ(true)
         ));
 
+        float playerDistance173 = Sqr(DistanceSquared(
+            Player::Collider.GetX(true),
+            NPC::Current173.Collider.GetY(true),
+            Player::Collider.GetX(true),
+            NPC::Current173.Collider.GetY(true),
+            Player::Collider.GetZ(true),
+            NPC::Current173.Collider.GetZ(true)
+        ));
+
         float currentAngle = n.Collider.GetYaw(true);
         float speed = .25f;
 
         if (playerDistance > 6.f) { n.IdleTimer += adjustedFPSFactor; } else { n.IdleTimer = 0; }
-
-        if (distance173 < 3.f) {
-            n.Angle = ATan2(NPC::Current173.Collider.GetZ(true) - n.Collider.GetZ(true), NPC::Current173.Collider.GetX(true) - n.Collider.GetX(true));
-
-            NPC::Current173.Idle = 1;
-        }
-        else if (playerDistance < 3.f) {
-            n.Angle = ATan2(Player::Collider.GetZ(true) - n.Collider.GetZ(true), Player::Collider.GetX(true) - n.Collider.GetX(true));
-        
-            if (playerDistance < 1.f && Rand(0,25) == 0) { n.Speed = -speed; n.Idle = 0; }
-        }
-        else {
-            if (Rand(0,50) == 0) {
-                n.Angle = Rnd(0,360);
-            }
-        }
-        n.Angle -= 90.f;
         
         if (n.IdleTimer >= 30.f) {
             // Out of bounds, waiting to be placed.
@@ -397,7 +401,7 @@ bool Hook_UpdateNPC(NPC@ n) {
             n.Collider.Position(-131, -131, -131);
             n.Collider.Reset();
 
-            if (Rand(0, 200) == 0) {
+            if (Rand(0, 200) == 0 && playerDistance173 > 6.f) {
                 n.IdleTimer = -10; // Place SCP-131.
             }
         }
@@ -417,6 +421,23 @@ bool Hook_UpdateNPC(NPC@ n) {
         else {
             // SCP-131 behavior.
 
+            if (distance173 < 3.f && NPC::Current173.Idle != 3) {
+                n.Angle = ATan2(NPC::Current173.Collider.GetZ(true) - n.Collider.GetZ(true), NPC::Current173.Collider.GetX(true) - n.Collider.GetX(true)) - 90.f;
+
+                NPC::Current173.Idle = 1;
+            }
+            else if (playerDistance < 4.f) {
+                n.Angle = ATan2(Player::Collider.GetZ(true) - n.Collider.GetZ(true), Player::Collider.GetX(true) - n.Collider.GetX(true)) - 90.f;
+            
+                if (playerDistance < 1.f && Rand(0,25) == 0) { n.Speed = -speed; n.Idle = 0; }
+                else if (playerDistance > 2.f && Rand(0,25) == 0) { n.Speed = speed; n.Idle = 0; }
+            }
+            else {
+                if (Rand(0,50) == 0) {
+                    n.Angle = Rnd(0,360) - 90.f;
+                } 
+            }
+
             n.DropSpeed = -0.1f;
 
             float diff = n.Angle - currentAngle; while (diff > 180.f) diff -= 360.f; while (diff < -180.f) diff += 360.f;
@@ -432,11 +453,11 @@ bool Hook_UpdateNPC(NPC@ n) {
             if (n.Idle == 0) { currentAngle += 90.f; }
             if (Rand(0, 500) == 0) { n.Speed = speed * (Rand(0,1) * 2 - 1); n.Idle = 1; }
             n.Collider.Translate(adjustedFPSFactor * n.CurrentSpeed * Cos(currentAngle), 0, adjustedFPSFactor * n.CurrentSpeed * Sin(currentAngle), false);
-        }
-
-        if (Rand(0,200) == 0) { n.Speed = 0; }
-        if (n.CurrentSpeed != n.Speed) {
-            n.CurrentSpeed = ((n.CurrentSpeed * 19.f) + n.Speed) / 20.f;
+            
+            if (Rand(0,200) == 0) { n.Speed = 0; }
+            if (n.CurrentSpeed != n.Speed) {
+                n.CurrentSpeed = ((n.CurrentSpeed * 19.f) + n.Speed) / 20.f;
+            }
         }
 
         n.Object.Position(n.Collider.GetX(true), n.Collider.GetY(true) - 0.32, n.Collider.GetZ(true), true);
