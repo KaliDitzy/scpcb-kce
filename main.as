@@ -344,46 +344,51 @@ bool Hook_UpdateEvent(Event@ e) {
 
 bool Hook_UpdateNPC(NPC@ n) {
     if (n.ID == scp131a.ID || n.ID == scp131b.ID) {
-        // n.State == Target Speed
+        // n.Speed == Target Speed
         // n.Idle == Movement Direction
-        // n.State2 == Target Angle
+        // n.Angle == Target Angle
 
         float adjustedFPSFactor = FPSFactor / 70.f;
 
-        float playerDistance = DistanceSquared(
+        float playerDistance = Sqr(DistanceSquared(
             n.Collider.GetX(true),
-            n.Collider.GetY(true),
-            n.Collider.GetZ(true),
             Player::Collider.GetX(true),
-            Player::Collider.GetY(true),
-            Player::Collider.GetZ(true)
-        );
-
-        float distance173 = DistanceSquared(
-            n.Collider.GetX(true),
             n.Collider.GetY(true),
+            Player::Collider.GetY(true),
             n.Collider.GetZ(true),
+            Player::Collider.GetZ(true)
+        ));
+
+        float distance173 = Sqr(DistanceSquared(
+            n.Collider.GetX(true),
             NPC::Current173.Collider.GetX(true),
+            n.Collider.GetY(true),
             NPC::Current173.Collider.GetY(true),
+            n.Collider.GetZ(true),
             NPC::Current173.Collider.GetZ(true)
-        );
+        ));
 
         float currentAngle = n.Collider.GetYaw(true);
         float speed = .25f;
 
         if (playerDistance > 6.f) { n.IdleTimer += adjustedFPSFactor; } else { n.IdleTimer = 0; }
-        if (playerDistance < 1.f && Rand(0,25) == 0) { n.State = -speed * 25.f; n.Idle = 0; }
 
         if (distance173 < 3.f) {
-            n.Collider.PointAt(NPC::Current173.Collider);
-            n.State2 = n.Collider.GetYaw(true);
-            n.Collider.Rotate(0, currentAngle, 0, true);
+            n.Angle = ATan2(NPC::Current173.Collider.GetZ(true) - n.Collider.GetZ(true), NPC::Current173.Collider.GetX(true) - n.Collider.GetX(true));
+
+            NPC::Current173.Idle = 1;
+        }
+        else if (playerDistance < 3.f) {
+            n.Angle = ATan2(Player::Collider.GetZ(true) - n.Collider.GetZ(true), Player::Collider.GetX(true) - n.Collider.GetX(true));
+        
+            if (playerDistance < 1.f && Rand(0,25) == 0) { n.Speed = -speed; n.Idle = 0; }
         }
         else {
-            n.Collider.PointAt(Player::Collider);
-            n.State2 = n.Collider.GetYaw(true);
-            n.Collider.Rotate(0, currentAngle, 0, true);
+            if (Rand(0,50) == 0) {
+                n.Angle = Rnd(0,360);
+            }
         }
+        n.Angle -= 90.f;
         
         if (n.IdleTimer >= 30.f) {
             // Out of bounds, waiting to be placed.
@@ -404,6 +409,7 @@ bool Hook_UpdateNPC(NPC@ n) {
             //float targetZ = Player::CurrentRoom.Z + (Rand(0,1) * 8) - 4;
             float targetX = Player::CurrentRoom.X; float targetZ = Player::CurrentRoom.Z;
             n.Collider.Position(targetX + Rnd(-0.5f,0.5f), Player::CurrentRoom.Y + 0.35f, targetZ + Rnd(-0.5f,0.5f), true);
+            n.Collider.Rotate(0, Rnd(0,360.f), 0, true);
             n.Collider.Reset();
 
             n.IdleTimer = 0;
@@ -413,19 +419,24 @@ bool Hook_UpdateNPC(NPC@ n) {
 
             n.DropSpeed = -0.1f;
 
-            if (currentAngle < n.State2) { n.Collider.Turn(0, -adjustedFPSFactor * 45, 0, true); }
-            else if (currentAngle > n.State2) { n.Collider.Turn(0, adjustedFPSFactor * 45, 0, true); }
+            float diff = n.Angle - currentAngle; while (diff > 180.f) diff -= 360.f; while (diff < -180.f) diff += 360.f;
+            float turnSpeed = adjustedFPSFactor * 45.f;
 
-            if (n.Idle == 0) { currentAngle += 90.f; }
+            if (diff > turnSpeed) diff = turnSpeed;
+            if (diff < -turnSpeed) diff = -turnSpeed;
+
+            float newYaw = currentAngle + diff;
+            n.Collider.Rotate(0, newYaw, 0, true);
 
             // Randomly move left or right.
-            if (Rand(0, 500) == 0) { n.State = speed * (Rand(0,1) * 2 - 1); n.Idle = 1; }
+            if (n.Idle == 0) { currentAngle += 90.f; }
+            if (Rand(0, 500) == 0) { n.Speed = speed * (Rand(0,1) * 2 - 1); n.Idle = 1; }
             n.Collider.Translate(adjustedFPSFactor * n.CurrentSpeed * Cos(currentAngle), 0, adjustedFPSFactor * n.CurrentSpeed * Sin(currentAngle), false);
         }
 
-        if (Rand(0,200) == 0) { n.State = 0; }
-        if (n.CurrentSpeed != n.State) {
-            n.CurrentSpeed = ((n.CurrentSpeed * 19.f) + n.State) / 20.f;
+        if (Rand(0,200) == 0) { n.Speed = 0; }
+        if (n.CurrentSpeed != n.Speed) {
+            n.CurrentSpeed = ((n.CurrentSpeed * 19.f) + n.Speed) / 20.f;
         }
 
         n.Object.Position(n.Collider.GetX(true), n.Collider.GetY(true) - 0.32, n.Collider.GetZ(true), true);
