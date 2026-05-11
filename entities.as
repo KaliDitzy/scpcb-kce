@@ -100,7 +100,8 @@ class TempSubroom {
     }
 
     void Spawn(Room@ r) {
-        subroomTemplate.CreateSubroom(r.X + (x / 256.f), r.Y + (y / 256.f), r.Z + (z / 256.f), angle);
+        Room@ newSubroom = subroomTemplate.CreateSubroom(r.X + (x / 256.f), r.Y + (y / 256.f), r.Z + (z / 256.f), angle);
+        newSubroom.Object.SetParent(r.Object, true);
     }
 }
 

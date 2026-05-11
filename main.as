@@ -261,17 +261,17 @@ bool Hook_FillRoom(Room@ r) {
         Generate015Nightmare();
     }
 
-    return false;
-}
-bool Hook_PostFillRoom(Room@ r) {
-    FillRoom_RandomItems(r);
-
     for (int i = 0; i < tempJunk.Length; i++) {
         if (tempJunk[i].rt.Name == r.Template.Name) { tempJunk[i].Spawn(@r); }
     }
     for (int i = 0; i < tempSubrooms.Length; i++) {
         if (tempSubrooms[i].rt.Name == r.Template.Name) { tempSubrooms[i].Spawn(@r); }
     }
+
+    return false;
+}
+bool Hook_PostFillRoom(Room@ r) {
+    FillRoom_RandomItems(r);
 
     return false;
 }
