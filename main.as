@@ -97,6 +97,9 @@ bool Hook_Initialize() {
     Register015Pipes("1");
     Register015Pipes("2");
 
+    RegisterSubroomTemplate(SubroomTemplate(192, 320, 1, "kce_lcz_sr_0"));
+    RegisterSubroomTemplate(SubroomTemplate(192, 320, 1, "kce_lcz_sr_1"));
+
     RegisterArchiveItem("clipboard", 15, 15, 5);
     RegisterArchiveItem("finefirstaid", 1, 5, 20);
     RegisterArchiveItem("firstaid", 30, 50, 100);
@@ -179,7 +182,7 @@ bool Hook_LoadRoomTemplateEntity(CB::RoomTemplate@ rt, int version, B3D::Stream@
 
         return true;
     }
-    else  if (name == "subroom") {
+    else if (name == "subroom") {
         float x = f.ReadFloat();
         float y = f.ReadFloat();
         float z = f.ReadFloat();
