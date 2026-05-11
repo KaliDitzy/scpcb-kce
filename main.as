@@ -440,7 +440,7 @@ bool Hook_UpdateNPC(NPC@ n) {
             if (distance173 < 3.f && NPC::Current173.Idle != 3) {
                 n.Angle = ATan2(NPC::Current173.Collider.GetZ(true) - n.Collider.GetZ(true), NPC::Current173.Collider.GetX(true) - n.Collider.GetX(true)) - 90.f;
 
-                NPC::Current173.Idle = 4;
+                NPC::Current173.Idle = 100;
             }
             else if (playerDistance < 4.f) {
                 n.Angle = ATan2(Player::Collider.GetZ(true) - n.Collider.GetZ(true), Player::Collider.GetX(true) - n.Collider.GetX(true)) - 90.f;
@@ -480,7 +480,7 @@ bool Hook_UpdateNPC(NPC@ n) {
         return true;
     }
     else if (n.NPCType == NPC::Type::SCP173) {
-        if (n.Idle == 4) {
+        if (n.Idle == 100) {
             n.DropSpeed = SmartDropSpeed(-0.01f, n);
 
             n.Channel.Stop();
