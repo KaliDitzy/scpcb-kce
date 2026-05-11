@@ -183,17 +183,26 @@ bool Hook_LoadRoomTemplateEntity(CB::RoomTemplate@ rt, int version, B3D::Stream@
         return true;
     }
     else if (name == "subroom") {
+        Console::CreateMessage("Reading x (float)");
         float x = f.ReadFloat();
+        Console::CreateMessage("Reading y (float)");
         float y = f.ReadFloat();
+        Console::CreateMessage("Reading z (float)");
         float z = f.ReadFloat();
+        Console::CreateMessage("Reading angle (int)");
         int angle = f.ReadInt();
 
+        Console::CreateMessage("Reading width (int)");
         int width = f.ReadInt();
+        Console::CreateMessage("Reading height (int)");
         int height = f.ReadInt();
+        Console::CreateMessage("Reading zone (int)");
         int zone = f.ReadInt();
 
+        Console::CreateMessage("Registering TempSubroom");
         RegisterTempSubroom(TempSubroom(rt, PickSubroomTemplate(CollectSubroomTemplates(width, height, zone)), x, y, z, angle));
 
+        Console::CreateMessage("No problems reading subroom entity!");
         return true;
     }
     return false;

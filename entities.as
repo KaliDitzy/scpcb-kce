@@ -49,15 +49,12 @@ class TempJunk {
         switch(select) {
             case 0:
                 return file1;
-                break;
             case 1:
                 if (file2 != "") { return file2; }
                 else { return RandomFile(); }
-                break;
             case 2:
                 if (file3 != "") { return file3; }
                 else { return RandomFile(); }
-                break;
             default:
                 return file1;
         }
@@ -91,22 +88,29 @@ class TempSubroom {
     SubroomTemplate@ subroomTemplate;
 
     TempSubroom() {
-        this.subroomTemplate = @PickSubroomTemplate(CollectSubroomTemplates(512, 512, 1));
+        this.subroomTemplate = PickSubroomTemplate(CollectSubroomTemplates(512, 512, 1));
     }
     TempSubroom(RoomTemplate@ rt, SubroomTemplate@ subroomTemplate, float x, float y, float z, int angle) {
         @this.rt = rt;
-        this.subroomTemplate = @subroomTemplate;
+        this.subroomTemplate = subroomTemplate;
         this.x = x; this.y = y; this.z = z; this.angle = angle;
     }
 
     void Spawn(Room@ r) {
+        Console::CreateMessage("Spawning TempSubroom from TempSubroom");
         Room@ newSubroom = subroomTemplate.CreateSubroom(r.X + (x / 256.f), r.Y + (y / 256.f), r.Z + (z / 256.f), angle);
+        Console::CreateMessage("Parenting Subroom from TempSubroom");
         newSubroom.Object.SetParent(r.Object, true);
+        
+        Console::CreateMessage("Room is located at: " + ToString(r.X) + ", " + ToString(r.Y) + ", " + ToString(r.Z));
+        Console::CreateMessage("Subroom is located at: " + ToString(newSubroom.X) + ", " + ToString(newSubroom.Y) + ", " + ToString(newSubroom.Z));
     }
 }
 
 array<TempSubroom> tempSubrooms;
 
 void RegisterTempSubroom(TempSubroom ts) {
+    Console::CreateMessage("hello from RegisterTempSubroom");
     tempSubrooms.InsertLast(ts);
+    Console::CreateMessage("goodbye from RegisterTempSubroom");
 }

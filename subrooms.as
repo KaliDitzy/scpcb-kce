@@ -17,13 +17,16 @@ class SubroomTemplate {
     }
 
     Room@ CreateSubroom(float x, float y, float z, int angle) {
+        Console::CreateMessage("Creating Subroom from SubroomTemplate");
         Room@ newRoom = Room(this.zone, -1, x, y, z, angle, this.name);
 
-        newRoom.Object = LoadRMesh("GFX\\map\\" + this.name);
+        Console::CreateMessage("Loading RMesh from SubroomTemplate");
+        @newRoom.Object = LoadRMesh("GFX\\map\\" + this.name);
         newRoom.Object.Scale(1 / 256.f, 1 / 256.f, 1 / 256.f, true);
         newRoom.Object.Position(x, y, z, true);
         newRoom.Object.Rotate(0, angle, 0, true);
 
+        Console::CreateMessage("Returning RMesh from SubroomTemplate");
         return @newRoom;
     }
 }
