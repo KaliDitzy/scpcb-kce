@@ -43,8 +43,33 @@ class TempJunk {
         this.minObj = minObj; this.maxObj = maxObj;
     }
 
+    string RandomFile() {
+        int select = Rand(0,2);
+        switch(select) {
+            case 0:
+                return file1;
+                break;
+            case 1:
+                if (file2 != "") { return file2; }
+                else { return RandomFile(); }
+                break;
+            case 2:
+                if (file3 != "") { return file3; }
+                else { return RandomFile(); }
+                break;
+            default:
+                return file1;
+        }
+    }
+
     void Spawn(Room@ r) {
-        
+        for (int i = 0; i < Rand(minObj, maxObj); i++) {
+            Entity@ o = LoadMesh(RandomFile(), null);
+            o.Position(r.X + (Rnd(minPos.X, maxPos.X) / 256.f), r.Y + (Rnd(minPos.Y, maxPos.Y) / 256.f), r.Z + (Rnd(minPos.Z, maxPos.Z) / 256.f), true);
+            o.Rotate(Rnd(0, maxRot.X), Rnd(0, maxRot.Y), Rnd(0, maxRot.Z), true);
+            o.Scale(Rnd(minScale, maxScale), Rnd(minScale, maxScale), Rnd(minScale, maxScale), true);
+            o.SetParent(r.Object, true);
+        }
     }
 };
 

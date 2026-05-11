@@ -6,9 +6,8 @@ using namespace CB;
 #include "randomitems.as"
 #include "015.as"
 
-NPC@ scp131a; bool scp131a_spawned;
-NPC@ scp131b; bool scp131b_spawned;
-Mesh@ scp131_mesh;
+NPC@ scp131a;
+NPC@ scp131b;
 
 Music music015;
 Music music015inside;
@@ -54,7 +53,6 @@ void SpawnItemsLow(Room@ r, float x, float y, float z, int maxItems, float spaci
 }
 
 bool Hook_Initialize() {
-    @scp131_mesh = LoadMesh("GFX\\npcs\\131.b3d", null);
     music015 = Music::RegisterCustom("SFX\\Music\\015.ogg");
     music015inside = Music::RegisterCustom("SFX\\Music\\015Inside.ogg");
 
@@ -145,8 +143,9 @@ bool Hook_Initialize() {
 }
 
 bool Hook_InitializeEvents() {
-    Event::Create("kce_018cc", "kce_018cc", 0, 1);
     Event::Create("kce_015cc", "kce_015cc", 0, 1);
+    Event::Create("kce_018cc", "kce_018cc", 0, 1);
+    Event::Create("131spawn", "kce_ez_lounge", 0, 1);
 
     return false;
 }
@@ -270,62 +269,10 @@ bool Hook_PostFillRoom(Room@ r) {
     return false;
 }
 
-void Hook_Update() {
-    if (!scp131a_spawned && !Menu::IsMainMenuOpen) {
-        Console::CreateMessage("SCP-131-A is being spawned.", 255, 255, 0);
-
-        @scp131a = NPC(NPC::Type::ClassD, 0, 0, 0);
-        scp131a.ID = 13101;
-        scp131a.NVName = "SCP-131-A";
-        scp131a.Collider.SetRadius(0.125, 0.125);
-        scp131a.CollRadius = 0.125;
-        scp131a.Idle = 30;
-        scp131a.Speed = 0;
-
-        scp131a.Object.Free();
-        @scp131a.Object = LoadMesh("GFX\\npcs\\131.b3d", null);//scp131_mesh;
-        scp131a.Object.Scale(1 / 256.f, 1 / 256.f, 1 / 256.f, true);
-
-        scp131a.Texture = "GFX\\npcs\\131a.png";
-        Texture@ tex = LoadTexture(scp131a.Texture);
-        Mesh@ mesh = cast<Mesh@>(cast<Model@>(scp131a.Object));
-        mesh.SetTexture(tex);
-        tex.Free();
-
-        scp131a_spawned = true;
-    }
-
-    if (!scp131b_spawned && !Menu::IsMainMenuOpen) {
-        Console::CreateMessage("SCP-131-B is being spawned.", 255, 255, 0);
-
-        @scp131b = NPC(NPC::Type::ClassD, 0, 0, 0);
-        scp131b.ID = 13102;
-        scp131b.NVName = "SCP-131-B";
-        scp131b.Collider.SetRadius(0.125, 0.125);
-        scp131b.CollRadius = 0.125;
-        scp131b.Idle = 30;
-        scp131b.Speed = 0;
-
-        scp131b.Object.Free();
-        @scp131b.Object = LoadMesh("GFX\\npcs\\131.b3d", null);//scp131_mesh;
-        scp131b.Object.Scale(1 / 256.f, 1 / 256.f, 1 / 256.f, true);
-
-        scp131b.Texture = "GFX\\npcs\\131b.png";
-        Texture@ tex = LoadTexture(scp131b.Texture);
-        Mesh@ mesh = cast<Mesh@>(cast<Model@>(scp131b.Object));
-        mesh.SetTexture(tex);
-        tex.Free();
-        
-        scp131b_spawned = true;
-    }
-}
 bool Hook_UpdateEvent(Event@ e) {
     bool playerIsInRoom = (@e.Room == @Player::CurrentRoom);
     if (e.Name == "room1archive") {
         return true;
-    }
-    else if (e.Name == "kce_018cc" && playerIsInRoom) {
-        e.State2 = Event::UpdateElevator(e.State2, e.Room.Doors[0], e.Room.Doors[1], e.Room.Objects[0], e.Room.Objects[1], e);
     }
     else if (e.Name == "kce_015cc") {
         if (playerIsInRoom && !playerInside015) {
@@ -364,6 +311,52 @@ bool Hook_UpdateEvent(Event@ e) {
         }
         else if (playerIsInRoom && (Player::Collider.GetY(true) < -1)) {
             Music::ShouldPlay = music015;
+        }
+    }
+    else if (e.Name == "kce_018cc" && playerIsInRoom) {
+        e.State2 = Event::UpdateElevator(e.State2, e.Room.Doors[0], e.Room.Doors[1], e.Room.Objects[0], e.Room.Objects[1], e);
+    }
+    else if (e.Name == "131spawn" && playerIsInRoom) {
+        if (e.State < 1) {
+            //Spawn SCP-131-A
+            @scp131a = NPC(NPC::Type::ClassD, e.Room.X + Rnd(-0.5,0.5), e.Room.Y + 0.32f, e.Room.Z + Rnd(-0.5,0.5));
+            scp131a.ID = 13101;
+            scp131a.NVName = "SCP-131-A";
+            scp131a.Collider.SetRadius(0.125, 0.125);
+            scp131a.CollRadius = 0.125;
+            scp131a.IdleTimer = 0;
+            scp131a.Speed = 0;
+
+            scp131a.Object.Free();
+            @scp131a.Object = LoadMesh("GFX\\npcs\\131.b3d", null);//scp131_mesh;
+            scp131a.Object.Scale(1 / 256.f, 1 / 256.f, 1 / 256.f, true);
+
+            scp131a.Texture = "GFX\\npcs\\131a.png";
+            Texture@ tex = LoadTexture(scp131a.Texture);
+            Mesh@ mesh = cast<Mesh@>(cast<Model@>(scp131a.Object));
+            mesh.SetTexture(tex);
+            tex.Free();
+
+            // Spawn SCP-131-B
+            @scp131b = NPC(NPC::Type::ClassD, e.Room.X + Rnd(-0.5,0.5), e.Room.Y + 0.32f, e.Room.Z + Rnd(-0.5,0.5));
+            scp131b.ID = 13102;
+            scp131b.NVName = "SCP-131-B";
+            scp131b.Collider.SetRadius(0.125, 0.125);
+            scp131b.CollRadius = 0.125;
+            scp131b.IdleTimer = 0;
+            scp131b.Speed = 0;
+
+            scp131b.Object.Free();
+            @scp131b.Object = LoadMesh("GFX\\npcs\\131.b3d", null);//scp131_mesh;
+            scp131b.Object.Scale(1 / 256.f, 1 / 256.f, 1 / 256.f, true);
+
+            scp131b.Texture = "GFX\\npcs\\131b.png";
+            Texture@ tex2 = LoadTexture(scp131b.Texture);
+            Mesh@ mesh2 = cast<Mesh@>(cast<Model@>(scp131b.Object));
+            mesh2.SetTexture(tex2);
+            tex2.Free();
+
+            e.State = 1;
         }
     }
 
@@ -406,7 +399,7 @@ bool Hook_UpdateNPC(NPC@ n) {
         ));
 
         float currentAngle = n.Collider.GetYaw(true);
-        float speed = .25f;
+        float speed = .5f;
 
         if (playerDistance > 6.f) { n.IdleTimer += adjustedFPSFactor; } else { n.IdleTimer = 0; }
         
@@ -422,8 +415,6 @@ bool Hook_UpdateNPC(NPC@ n) {
         }
         else if (n.IdleTimer < 0) {
             // Places SCP-131.
-            Console::CreateMessage(n.NVName + " is being placed.", 255, 255, 0);
-
             int randomDirection = Rand(0,1);
             float targetX = Player::CurrentRoom.X;
             float targetZ = Player::CurrentRoom.Z;
@@ -477,7 +468,7 @@ bool Hook_UpdateNPC(NPC@ n) {
             if (Rand(0, 500) == 0) { n.Speed = speed * (Rand(0,1) * 2 - 1); n.Idle = 1; }
             n.Collider.Translate(adjustedFPSFactor * n.CurrentSpeed * Cos(currentAngle), n.DropSpeed, adjustedFPSFactor * n.CurrentSpeed * Sin(currentAngle), false);
             
-            if (Rand(0,200) == 0) { n.Speed = 0; }
+            if (Rand(0,100) == 0) { n.Speed = 0; }
             if (n.CurrentSpeed != n.Speed) {
                 n.CurrentSpeed = ((n.CurrentSpeed * 19.f) + n.Speed) / 20.f;
             }
@@ -488,7 +479,7 @@ bool Hook_UpdateNPC(NPC@ n) {
 
         return true;
     }
-    else if (n.NVName == "SCP-173") {
+    else if (n.NPCType == NPC::Type::SCP173) {
         if (n.Idle == 4) {
             n.DropSpeed = SmartDropSpeed(-0.01f, n);
 
