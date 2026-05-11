@@ -4,6 +4,13 @@
   "Sprite": "sprites/subroom",
   "Properties": [
     {
+      "Name": "angle",
+      "Type": "Integer",
+      "SmartEditName": "Angle",
+      "DefaultValue": "0",
+      "HelpText": "The angle of the subroom."
+    },
+    {
       "Name": "width",
       "Type": "Integer",
       "SmartEditName": "Width",

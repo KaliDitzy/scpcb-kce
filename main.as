@@ -3,6 +3,7 @@ using namespace CB;
 
 #include "library.as"
 #include "entities.as"
+#include "subrooms.as"
 #include "randomitems.as"
 #include "015.as"
 
@@ -182,10 +183,13 @@ bool Hook_LoadRoomTemplateEntity(CB::RoomTemplate@ rt, int version, B3D::Stream@
         float x = f.ReadFloat();
         float y = f.ReadFloat();
         float z = f.ReadFloat();
+        int angle = f.ReadInt();
 
-        f.ReadInt();
-        f.ReadInt();
-        f.ReadInt();
+        int width = f.ReadInt();
+        int height = f.ReadInt();
+        int zone = f.ReadInt();
+
+        RegisterTempSubroom(TempSubroom(rt, PickSubroomTemplate(CollectSubroomTemplates(width, height, zone)), x, y, z, angle));
 
         return true;
     }
@@ -264,6 +268,9 @@ bool Hook_PostFillRoom(Room@ r) {
 
     for (int i = 0; i < tempJunk.Length; i++) {
         if (tempJunk[i].rt.Name == r.Template.Name) { tempJunk[i].Spawn(@r); }
+    }
+    for (int i = 0; i < tempSubrooms.Length; i++) {
+        if (tempSubrooms[i].rt.Name == r.Template.Name) { tempSubrooms[i].Spawn(@r); }
     }
 
     return false;

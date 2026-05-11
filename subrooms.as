@@ -15,6 +15,17 @@ class SubroomTemplate {
         this.width = width; this.height = height; this.zone = zone;
         this.name = name;
     }
+
+    Room@ CreateSubroom(float x, float y, float z, int angle) {
+        Room@ newRoom = Room(this.zone, -1, x, y, z, angle, this.name);
+
+        newRoom.Object = LoadRMesh("GFX\\map\\" + this.name);
+        newRoom.Object.Scale(1 / 256.f, 1 / 256.f, 1 / 256.f, true);
+        newRoom.Object.Position(x, y, z, true);
+        newRoom.Object.Rotate(0, angle, 0, true);
+
+        return @newRoom;
+    }
 }
 
 array<SubroomTemplate> subroomTemplates;
@@ -34,5 +45,5 @@ array<SubroomTemplate@> CollectSubroomTemplates(int width, int height, int zone)
 }
 
 SubroomTemplate@ PickSubroomTemplate(array<SubroomTemplate@> subroomTemplatesToPick) {
-    return subroomTemplatesToPick[Rand(0, subroomTemplatesToPick.Length-1)];
+    return @subroomTemplatesToPick[Rand(0, subroomTemplatesToPick.Length-1)];
 }

@@ -2,6 +2,7 @@ using namespace B3D;
 using namespace CB;
 
 #include "library.as"
+#include "subrooms.as"
 
 class TempJunk {
     RoomTemplate@ rt;
@@ -77,4 +78,34 @@ array<TempJunk> tempJunk;
 
 void RegisterTempJunk(TempJunk tj) {
     tempJunk.InsertLast(tj);
+}
+
+class TempSubroom {
+    RoomTemplate@ rt;
+
+    float x;
+    float y;
+    float z;
+    int angle;
+
+    SubroomTemplate@ subroomTemplate;
+
+    TempSubroom() {
+        this.subroomTemplate = @PickSubroomTemplate(CollectSubroomTemplates(512, 512, 1));
+    }
+    TempSubroom(RoomTemplate@ rt, SubroomTemplate@ subroomTemplate, float x, float y, float z, int angle) {
+        @this.rt = rt;
+        this.subroomTemplate = @subroomTemplate;
+        this.x = x; this.y = y; this.z = z; this.angle = angle;
+    }
+
+    void Spawn(Room@ r) {
+        subroomTemplate.CreateSubroom(r.X + (x / 256.f), r.Y + (y / 256.f), r.Z + (z / 256.f), angle);
+    }
+}
+
+array<TempSubroom> tempSubrooms;
+
+void RegisterTempSubroom(TempSubroom ts) {
+    tempSubrooms.InsertLast(ts);
 }
