@@ -97,20 +97,20 @@ class TempSubroom {
     }
 
     void Spawn(Room@ r) {
-        Console::CreateMessage("Spawning TempSubroom from TempSubroom");
+        Console::CreateMessage("Spawning TempSubroom from TempSubroom", 255, 255, 0);
         Room@ newSubroom = subroomTemplate.CreateSubroom(r.X + (x / 256.f), r.Y + (y / 256.f), r.Z + (z / 256.f), angle);
-        Console::CreateMessage("Parenting Subroom from TempSubroom");
+        Console::CreateMessage("Parenting Subroom from TempSubroom", 255, 255, 0);
         newSubroom.Object.SetParent(r.Object, true);
         
-        Console::CreateMessage("Room is located at: " + ToString(r.X) + ", " + ToString(r.Y) + ", " + ToString(r.Z));
-        Console::CreateMessage("Subroom is located at: " + ToString(newSubroom.X) + ", " + ToString(newSubroom.Y) + ", " + ToString(newSubroom.Z));
+        Console::CreateMessage("Room is located at: " + ToString(r.X) + ", " + ToString(r.Y) + ", " + ToString(r.Z), 255, 255, 0);
+        Console::CreateMessage("Subroom is located at: " + ToString(newSubroom.X) + ", " + ToString(newSubroom.Y) + ", " + ToString(newSubroom.Z), 255, 255, 0);
     }
 }
 
 array<TempSubroom> tempSubrooms;
 
 void RegisterTempSubroom(TempSubroom ts) {
-    Console::CreateMessage("hello from RegisterTempSubroom");
+    Console::CreateMessage("hello from RegisterTempSubroom", 255, 255, 0);
     tempSubrooms.InsertLast(ts);
-    Console::CreateMessage("goodbye from RegisterTempSubroom");
+    Console::CreateMessage("goodbye from RegisterTempSubroom", 255, 255, 0);
 }
