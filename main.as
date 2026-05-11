@@ -179,6 +179,17 @@ bool Hook_LoadRoomTemplateEntity(CB::RoomTemplate@ rt, int version, B3D::Stream@
 
         return true;
     }
+    else  if (name == "subroom") {
+        float x = f.ReadFloat();
+        float y = f.ReadFloat();
+        float z = f.ReadFloat();
+
+        f.ReadInt();
+        f.ReadInt();
+        f.ReadInt();
+
+        return true;
+    }
     return false;
 }
 
@@ -288,7 +299,7 @@ void Hook_Update() {
         Console::CreateMessage("SCP-131-B is being spawned.", 255, 255, 0);
 
         @scp131b = NPC(NPC::Type::ClassD, 0, 0, 0);
-        scp131b.ID = 131012;
+        scp131b.ID = 13102;
         scp131b.NVName = "SCP-131-B";
         scp131b.Collider.SetRadius(0.125, 0.125);
         scp131b.CollRadius = 0.125;

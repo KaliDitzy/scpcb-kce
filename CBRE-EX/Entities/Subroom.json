@@ -1,0 +1,28 @@
+{
+  "Name": "subroom",
+  "Description": "Spawns a subroom.",
+  "Sprite": "sprites/subroom",
+  "Properties": [
+    {
+      "Name": "width",
+      "Type": "Integer",
+      "SmartEditName": "Width",
+      "DefaultValue": "512",
+      "HelpText": "The width of the subroom."
+    },
+    {
+      "Name": "height",
+      "Type": "Integer",
+      "SmartEditName": "Height",
+      "DefaultValue": "512",
+      "HelpText": "The height of the subroom."
+    },
+    {
+      "Name": "zone",
+      "Type": "Integer",
+      "SmartEditName": "Zone Override",
+      "DefaultValue": "-1",
+      "HelpText": "Change this if you want to override the zone of the subroom that spawns."
+    }
+  ]
+}
